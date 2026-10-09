@@ -9,6 +9,8 @@ export default defineConfig({
         target: 'http://172.16.41.109:8000',
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/api/, ''),
+        timeout: 0,
+        proxyTimeout: 0,
       },
     },
   },

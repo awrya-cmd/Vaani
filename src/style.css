@@ -4,9 +4,11 @@
   /* Rajasthan-Inspired Editorial Palette */
   --parchment: #FBF6ED;
   --parchment-deep: #F3EBDD;
-  --card-surface: #FFFDF8;
-  --card-border: #E9DED1;
-  --card-border-subtle: #F0E8DC;
+  --card-surface: rgba(255, 252, 246, 0.74);
+  --card-border: rgba(225, 208, 193, 0.58);
+  --card-border-subtle: rgba(235, 221, 208, 0.42);
+  --terracotta-divider: rgba(196, 115, 94, 0.28);
+  --terracotta-accent: #C4735E;
   --ink: #302A27;
   --ink-muted: #6B5C58;
   --ink-faint: #968681;
@@ -19,9 +21,9 @@
   --green-subtle: #EDF4F0;
 
   /* Restrained Shadows & Transitions */
-  --shadow-card: 0 10px 30px rgba(48, 42, 39, 0.05), 0 1px 3px rgba(48, 42, 39, 0.03);
-  --shadow-card-hover: 0 16px 40px rgba(48, 42, 39, 0.08), 0 2px 6px rgba(48, 42, 39, 0.04);
-  --radius-card: 18px;
+  --shadow-card: 0 4px 18px -2px rgba(48, 42, 39, 0.04), 0 1px 3px rgba(48, 42, 39, 0.02);
+  --shadow-card-hover: 0 8px 24px -2px rgba(48, 42, 39, 0.07), 0 2px 5px rgba(48, 42, 39, 0.03);
+  --radius-card: 16px;
   --transition-fast: 180ms cubic-bezier(0.16, 1, 0.3, 1);
 
   /* Typography */
@@ -60,17 +62,17 @@ body {
 .scenic-wrapper::before {
   content: "";
   position: fixed;
-  top: -22vh;
+  top: -42vh;
   left: 0;
   width: 100%;
-  height: 132vh;
+  height: 142vh;
   background-image: 
     linear-gradient(to bottom, 
-      rgba(251, 246, 237, 0.05) 0%, 
-      rgba(251, 246, 237, 0.0) 25%, 
-      rgba(251, 246, 237, 0.0) 65%, 
-      rgba(251, 246, 237, 0.28) 85%, 
-      rgba(251, 246, 237, 0.70) 100%),
+      rgba(251, 246, 237, 0.0) 0%, 
+      rgba(251, 246, 237, 0.0) 35%, 
+      rgba(251, 246, 237, 0.0) 70%, 
+      rgba(251, 246, 237, 0.12) 88%, 
+      rgba(251, 246, 237, 0.32) 100%),
     url('/bg_rajasthan.png');
   background-position: center bottom;
   background-repeat: no-repeat;
@@ -278,21 +280,23 @@ body {
   background: var(--card-surface);
   border: 1px solid var(--card-border);
   border-radius: var(--radius-card);
-  box-shadow: var(--shadow-card);
-  padding: 20px 22px;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.75), inset 0 0 0 1px rgba(255, 255, 255, 0.30), var(--shadow-card);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  padding: 16px 18px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  min-height: 420px;
+  min-height: 400px;
   position: relative;
-  transition: transform var(--transition-fast), box-shadow var(--transition-fast), border-color var(--transition-fast);
-  animation: cardEntrance 280ms cubic-bezier(0.16, 1, 0.3, 1) both;
+  transition: transform 180ms cubic-bezier(0.16, 1, 0.3, 1), box-shadow 180ms cubic-bezier(0.16, 1, 0.3, 1), border-color 180ms cubic-bezier(0.16, 1, 0.3, 1);
+  animation: cardEntrance 180ms cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 
 @keyframes cardEntrance {
   from {
     opacity: 0;
-    transform: translateY(6px);
+    transform: translateY(5px);
   }
   to {
     opacity: 1;
@@ -302,39 +306,77 @@ body {
 
 .console-card:hover {
   transform: translateY(-2px);
-  box-shadow: var(--shadow-card-hover);
-  border-color: #DCCEC0;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.85), inset 0 0 0 1px rgba(255, 255, 255, 0.40), var(--shadow-card-hover);
+  border-color: rgba(196, 115, 94, 0.45);
+}
+
+/* Delicate, Consistent Jaali-Inspired Corner Details */
+.jaali-corner {
+  position: absolute;
+  pointer-events: none;
+  line-height: 0;
+  color: var(--terracotta-accent);
+  opacity: 0.38;
+  transition: opacity var(--transition-fast);
+  z-index: 1;
+}
+
+.console-card:hover .jaali-corner {
+  opacity: 0.72;
+}
+
+.jaali-corner-tl {
+  top: 6px;
+  left: 6px;
+}
+
+.jaali-corner-tr {
+  top: 6px;
+  right: 6px;
+  transform: scaleX(-1);
+}
+
+.jaali-corner-bl {
+  bottom: 6px;
+  left: 6px;
+  transform: scaleY(-1);
+}
+
+.jaali-corner-br {
+  bottom: 6px;
+  right: 6px;
+  transform: scale(-1, -1);
 }
 
 /* Minimal, Tasteful Jaali Top Accent */
 .jaali-accent-top {
   position: absolute;
   top: 0;
-  left: 20px;
-  right: 20px;
-  height: 2px;
+  left: 24px;
+  right: 24px;
+  height: 1.5px;
   background-image: repeating-linear-gradient(90deg, 
-    var(--dusty-rose) 0, var(--dusty-rose) 4px, 
-    transparent 4px, transparent 8px, 
-    var(--muted-marigold) 8px, var(--muted-marigold) 12px, 
-    transparent 12px, transparent 16px
+    var(--terracotta-accent) 0, var(--terracotta-accent) 3px, 
+    transparent 3px, transparent 6px, 
+    var(--muted-marigold) 6px, var(--muted-marigold) 9px, 
+    transparent 9px, transparent 12px
   );
-  opacity: 0.28;
-  border-radius: 2px;
+  opacity: 0.30;
+  border-radius: 1px;
 }
 
 .card-top-head {
   display: flex;
   align-items: center;
-  gap: 12px;
-  padding-bottom: 14px;
-  border-bottom: 1px solid var(--card-border-subtle);
+  gap: 10px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--terracotta-divider);
 }
 
 .card-top-icon {
-  width: 38px;
-  height: 38px;
-  border-radius: 10px;
+  width: 36px;
+  height: 36px;
+  border-radius: 9px;
   display: grid;
   place-items: center;
   flex-shrink: 0;
@@ -375,21 +417,22 @@ body {
 .cards-connector-arrow {
   display: grid;
   place-items: center;
-  width: 36px;
-  height: 36px;
+  width: 32px;
+  height: 32px;
   border-radius: 50%;
-  background: #FFFDF8;
-  border: 1px solid var(--card-border);
-  color: var(--dusty-rose);
+  background: rgba(254, 251, 246, 0.92);
+  border: 1px solid var(--terracotta-divider);
+  color: var(--terracotta-accent);
   align-self: center;
   flex-shrink: 0;
   box-shadow: 0 2px 6px rgba(48, 42, 39, 0.03);
-  transition: transform var(--transition-fast), border-color var(--transition-fast);
+  transition: transform var(--transition-fast), border-color var(--transition-fast), color var(--transition-fast);
 }
 
 .cards-connector-arrow:hover {
   transform: scale(1.08);
   border-color: var(--dusty-rose);
+  color: var(--dusty-rose);
 }
 
 /* ==========================================================================
@@ -397,10 +440,10 @@ body {
    ========================================================================== */
 .language-selectors-strip {
   display: grid;
-  grid-template-columns: 1fr 34px 1fr;
-  gap: 10px;
+  grid-template-columns: 1fr 32px 1fr;
+  gap: 8px;
   align-items: end;
-  margin: 14px 0 16px;
+  margin: 10px 0 12px;
 }
 
 .selector-group label {
@@ -463,8 +506,8 @@ select.custom-select:focus {
 }
 
 .mic-waveform-studio {
-  background: #FAF5ED;
-  border: 1px solid var(--card-border-subtle);
+  background: rgba(250, 245, 237, 0.48);
+  border: 1px solid rgba(214, 188, 168, 0.35);
   border-radius: 14px;
   padding: 16px 14px 14px;
   display: flex;
@@ -473,86 +516,125 @@ select.custom-select:focus {
   text-align: center;
   margin-top: 2px;
   position: relative;
+  min-height: 180px;
+  justify-content: center;
 }
 
-.mic-stage-row {
-  width: 100%;
+.mic-signature-stage {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 12px;
+  padding: 4px 0 6px;
   position: relative;
-  margin-bottom: 12px;
 }
 
-.waveform-canvas {
-  flex: 1;
-  height: 42px;
-  max-width: 95px;
-  display: block;
-}
-
-.mic-glow-button {
-  width: 60px;
-  height: 60px;
+/* Prominent Circular Microphone Button (72px) */
+.mic-signature-btn {
+  width: 72px;
+  height: 72px;
   border-radius: 50%;
-  background: var(--dusty-rose);
-  border: 3px solid #FFFDF8;
+  background: linear-gradient(145deg, #CF677B, #B84A60);
+  border: 3.5px solid rgba(255, 253, 248, 0.95);
   color: #FFF;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  display: grid;
+  place-items: center;
   cursor: pointer;
-  box-shadow: 0 4px 14px rgba(199, 93, 114, 0.25);
-  transition: transform var(--transition-fast), background-color var(--transition-fast), box-shadow var(--transition-fast);
   outline: none;
   position: relative;
   z-index: 2;
+  transition: transform var(--transition-fast), background-color var(--transition-fast), box-shadow var(--transition-fast);
 }
 
-.mic-glow-button:hover:not(:disabled) {
+/* Subtle Rose Halo when Idle */
+.mic-signature-btn.idle {
+  animation: roseIdleHalo 2.5s ease-in-out infinite;
+}
+
+@keyframes roseIdleHalo {
+  0% {
+    box-shadow: 0 0 0 0 rgba(199, 93, 114, 0.35), 0 8px 22px -2px rgba(199, 93, 114, 0.28);
+  }
+  50% {
+    box-shadow: 0 0 0 10px rgba(199, 93, 114, 0.10), 0 10px 28px -2px rgba(199, 93, 114, 0.35);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(199, 93, 114, 0.35), 0 8px 22px -2px rgba(199, 93, 114, 0.28);
+  }
+}
+
+.mic-signature-btn.idle:hover {
   transform: scale(1.05);
-  background: var(--dusty-rose-dark);
+  background: linear-gradient(145deg, #D46F83, #A94357);
 }
 
-.mic-glow-button.recording {
-  background: var(--green-sage);
-  box-shadow: 0 0 0 8px rgba(78, 110, 90, 0.20);
-  animation: ripplePulse 1.4s infinite;
+/* Recording State */
+.mic-signature-btn.recording {
+  background: linear-gradient(145deg, #4E6E5A, #3D5A48);
+  animation: recordingPulse 1.5s infinite;
 }
 
-@keyframes ripplePulse {
-  0% { box-shadow: 0 0 0 0 rgba(78, 110, 90, 0.35); }
+@keyframes recordingPulse {
+  0% { box-shadow: 0 0 0 0 rgba(78, 110, 90, 0.40); }
   70% { box-shadow: 0 0 0 14px rgba(78, 110, 90, 0); }
   100% { box-shadow: 0 0 0 0 rgba(78, 110, 90, 0); }
 }
 
-.mic-title-caption {
-  font-weight: 600;
-  font-size: 13.5px;
-  color: var(--ink);
-  margin-bottom: 2px;
+.mic-signature-btn.has-audio:not(.recording) {
+  background: linear-gradient(145deg, #D99A3D, #C2822B);
+  box-shadow: 0 4px 18px rgba(217, 154, 61, 0.30);
 }
 
-.mic-hint-caption {
-  font-size: 11.5px;
-  color: var(--ink-muted);
-  line-height: 1.4;
+/* Collapsible Web Audio API Waveform */
+.mic-waveform-collapsible {
+  width: 100%;
+  max-width: 270px;
+  margin: 0 auto;
+  transition: max-height 220ms cubic-bezier(0.16, 1, 0.3, 1), opacity 200ms ease, margin 220ms ease;
+  overflow: hidden;
+}
+
+.mic-waveform-collapsible.expanded {
+  max-height: 48px;
+  opacity: 1;
+  margin: 8px auto 4px;
+}
+
+.mic-waveform-collapsible.collapsed {
+  max-height: 0;
+  opacity: 0;
+  margin: 0 auto;
+  pointer-events: none;
+}
+
+.live-waveform-canvas {
+  width: 100%;
+  height: 40px;
+  display: block;
+}
+
+/* Recording Status, Timer & Listening Label */
+.mic-live-meta {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  margin-top: 4px;
+  animation: fadeInSlide 180ms ease both;
 }
 
 .mic-timer-pill {
-  margin-top: 8px;
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  background: #FFFDF8;
+  background: rgba(255, 253, 248, 0.95);
   border: 1px solid var(--card-border);
   border-radius: 999px;
-  padding: 3px 10px;
+  padding: 2px 10px;
   font-size: 11px;
   font-weight: 700;
   color: var(--dusty-rose);
   font-variant-numeric: tabular-nums;
+  box-shadow: 0 1px 4px rgba(48, 42, 39, 0.04);
 }
 
 .mic-timer-dot {
@@ -572,14 +654,109 @@ select.custom-select:focus {
   100% { transform: scale(0.9); opacity: 0.8; }
 }
 
+.mic-title-caption.live-caption {
+  font-weight: 600;
+  font-size: 13.5px;
+  color: var(--ink);
+  margin-top: 2px;
+}
+
+/* Compact Audio-Ready Indicator (Smoothly reveals on stop) */
+.mic-collapsed-ready-area {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+  margin-top: 8px;
+  animation: fadeInSlide 220ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.compact-audio-ready-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  background: rgba(255, 253, 248, 0.95);
+  border: 1px solid rgba(78, 110, 90, 0.35);
+  border-radius: 999px;
+  padding: 4px 12px 4px 8px;
+  box-shadow: 0 2px 8px rgba(78, 110, 90, 0.08);
+}
+
+.ready-indicator-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--green-sage);
+  flex-shrink: 0;
+}
+
+.ready-file-title {
+  font-size: 11.5px;
+  font-weight: 600;
+  color: var(--ink);
+  max-width: 140px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.ready-action-tag {
+  font-size: 9.5px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.7px;
+  color: var(--green-sage);
+  background: var(--green-subtle);
+  padding: 2px 6px;
+  border-radius: 999px;
+}
+
+.ready-hint {
+  font-size: 11px;
+}
+
+/* Idle State Captions */
+.mic-idle-meta {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  margin-top: 8px;
+  animation: fadeInSlide 180ms ease both;
+}
+
+.mic-title-caption {
+  font-weight: 600;
+  font-size: 13.5px;
+  color: var(--ink);
+  margin-bottom: 2px;
+}
+
+.mic-hint-caption {
+  font-size: 11.5px;
+  color: var(--ink-muted);
+  line-height: 1.4;
+}
+
+@keyframes fadeInSlide {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 .card-voice-footer {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 10px;
-  margin-top: 14px;
-  padding-top: 12px;
-  border-top: 1px solid var(--card-border-subtle);
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid var(--terracotta-divider);
 }
 
 .text-action-btn {
@@ -628,35 +805,40 @@ select.custom-select:focus {
 .conversation-blocks-stack {
   display: flex;
   flex-direction: column;
-  gap: 10px;
-  margin: 14px 0 12px;
+  gap: 8px;
+  margin: 10px 0;
+  flex: 1;
 }
 
 .transcript-section-card {
-  background: #FAF5ED;
-  border: 1px solid var(--card-border-subtle);
-  border-radius: 12px;
-  padding: 10px 12px 8px;
+  flex: 1;
+  background: rgba(250, 245, 237, 0.48);
+  border: 1px solid rgba(214, 188, 168, 0.35);
+  border-radius: 10px;
+  padding: 8px 10px 6px;
   display: flex;
   flex-direction: column;
-  gap: 5px;
+  justify-content: space-between;
+  gap: 4px;
+  min-height: 82px;
   position: relative;
-  transition: border-color var(--transition-fast);
+  transition: border-color var(--transition-fast), background-color var(--transition-fast);
 }
 
 .transcript-section-card:hover {
-  border-color: #E2D3C4;
+  border-color: rgba(196, 115, 94, 0.45);
+  background: rgba(250, 245, 237, 0.85);
 }
 
 .transcript-header-row {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 8px;
+  gap: 6px;
 }
 
 .transcript-label-caps {
-  font-size: 9.5px;
+  font-size: 9px;
   font-weight: 700;
   letter-spacing: 1.1px;
   text-transform: uppercase;
@@ -667,35 +849,221 @@ select.custom-select:focus {
   display: inline-flex;
   align-items: center;
   gap: 5px;
-  background: #FFFDF8;
+  background: rgba(255, 253, 248, 0.90);
   border: 1px solid var(--card-border);
   border-radius: 999px;
-  padding: 2px 8px;
-  font-size: 11px;
+  padding: 2px 7px;
+  font-size: 10.5px;
   font-weight: 600;
   color: var(--ink);
 }
 
-.flag-emoji {
-  font-size: 12px;
-  line-height: 1;
+/* Ornamental Indian Jaali Translation Loading Moment */
+.transcript-loading-state {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 48px;
+  padding: 4px 0;
+  animation: fadeInSlide 200ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.jaali-loader-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+.jaali-loader-emblem {
+  position: relative;
+  width: 46px;
+  height: 46px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Background Slowly Rotating Jaali Geometry */
+.jaali-bg-mandala {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 46px;
+  height: 46px;
+  animation: jaaliRotateSlow 9s linear infinite;
+  transform-origin: 25px 25px;
+  pointer-events: none;
+}
+
+@keyframes jaaliRotateSlow {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* Foreground Curved Soundwave Strokes Moving Towards Each Other */
+.jaali-soundwaves {
+  position: relative;
+  width: 46px;
+  height: 46px;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.wave-stroke {
+  transform-origin: center center;
+}
+
+/* Left curved strokes gently move towards center */
+.wave-left-outer {
+  animation: waveMoveLeftOuter 1.6s ease-in-out infinite;
+}
+
+.wave-left-inner {
+  animation: waveMoveLeftInner 1.6s ease-in-out infinite;
+}
+
+@keyframes waveMoveLeftOuter {
+  0%, 100% {
+    transform: translateX(0);
+    opacity: 0.65;
+  }
+  50% {
+    transform: translateX(2.6px);
+    opacity: 1;
+  }
+}
+
+@keyframes waveMoveLeftInner {
+  0%, 100% {
+    transform: translateX(0);
+    opacity: 0.75;
+  }
+  50% {
+    transform: translateX(1.8px);
+    opacity: 1;
+  }
+}
+
+/* Right curved strokes gently move towards center */
+.wave-right-inner {
+  animation: waveMoveRightInner 1.6s ease-in-out infinite;
+}
+
+.wave-right-outer {
+  animation: waveMoveRightOuter 1.6s ease-in-out infinite;
+}
+
+@keyframes waveMoveRightInner {
+  0%, 100% {
+    transform: translateX(0);
+    opacity: 0.75;
+  }
+  50% {
+    transform: translateX(-1.8px);
+    opacity: 1;
+  }
+}
+
+@keyframes waveMoveRightOuter {
+  0%, 100% {
+    transform: translateX(0);
+    opacity: 0.65;
+  }
+  50% {
+    transform: translateX(-2.6px);
+    opacity: 1;
+  }
+}
+
+/* Center Acoustic Jewel Pulse */
+.wave-center-jewel {
+  animation: jewelPulse 1.6s ease-in-out infinite;
+  transform-origin: 25px 25px;
+}
+
+@keyframes jewelPulse {
+  0%, 100% {
+    transform: scale(0.9);
+    opacity: 0.75;
+  }
+  50% {
+    transform: scale(1.3);
+    opacity: 1;
+  }
+}
+
+/* Progressive Status Label & Animated Ellipsis */
+.jaali-loader-text-wrap {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  font-family: var(--font-sans);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.6px;
+  text-transform: uppercase;
+  color: var(--dusty-rose);
+  animation: fadeInText 220ms ease both;
+}
+
+@keyframes fadeInText {
+  from { opacity: 0; transform: translateY(2px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.jaali-loader-dots {
+  display: inline-flex;
+  gap: 1px;
+  font-weight: 700;
+}
+
+.jaali-loader-dots .dot {
+  animation: dotBlink 1.4s infinite;
+  opacity: 0.3;
+}
+
+.jaali-loader-dots .dot-1 { animation-delay: 0s; }
+.jaali-loader-dots .dot-2 { animation-delay: 0.25s; }
+.jaali-loader-dots .dot-3 { animation-delay: 0.5s; }
+
+@keyframes dotBlink {
+  0%, 100% { opacity: 0.3; }
+  50% { opacity: 1; }
 }
 
 .transcript-content-text {
-  font-size: 13.5px;
-  line-height: 1.55;
+  font-size: 13px;
+  line-height: 1.5;
   color: var(--ink);
-  min-height: 42px;
-  max-height: 74px;
+  min-height: 36px;
+  max-height: 60px;
   overflow-y: auto;
   white-space: pre-wrap;
   word-break: break-word;
 }
 
+/* Contraction and Translated Text Fade-In */
+@keyframes transcriptTextFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.transcript-content-text.fade-in {
+  animation: transcriptTextFadeIn 250ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
 .transcript-content-text.empty {
   color: var(--ink-faint);
   font-style: italic;
-  font-size: 12.5px;
+  font-size: 12px;
 }
 
 .copy-icon-btn {
@@ -704,12 +1072,12 @@ select.custom-select:focus {
   border: none;
   color: var(--dusty-rose);
   cursor: pointer;
-  font-size: 12px;
-  padding: 2px 6px;
+  font-size: 11px;
+  padding: 1px 5px;
   border-radius: 4px;
   display: inline-flex;
   align-items: center;
-  gap: 4px;
+  gap: 3px;
   font-weight: 600;
   transition: var(--transition-fast);
 }
@@ -724,13 +1092,13 @@ select.custom-select:focus {
 }
 
 .translated-voice-player {
-  background: #FAF5ED;
-  border: 1px solid var(--card-border-subtle);
-  border-radius: 12px;
-  padding: 10px 12px;
+  background: rgba(250, 245, 237, 0.70);
+  border: 1px solid rgba(214, 188, 168, 0.45);
+  border-radius: 10px;
+  padding: 8px 10px;
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
   margin-top: 2px;
 }
 
@@ -903,8 +1271,20 @@ select.custom-select:focus {
 }
 
 /* ==========================================================================
-   RESPONSIVE DESIGN
+   RESPONSIVE DESIGN (Tablets & Phones: <=960px, <=768px, <=600px, <=480px, <=360px)
    ========================================================================== */
+@keyframes roseIdleHaloMobile {
+  0% {
+    box-shadow: 0 0 0 0 rgba(199, 93, 114, 0.35), 0 4px 14px -2px rgba(199, 93, 114, 0.25);
+  }
+  50% {
+    box-shadow: 0 0 0 6px rgba(199, 93, 114, 0.10), 0 6px 18px -2px rgba(199, 93, 114, 0.30);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(199, 93, 114, 0.35), 0 4px 14px -2px rgba(199, 93, 114, 0.25);
+  }
+}
+
 @media (max-width: 960px) {
   .workspace-grid {
     grid-template-columns: 1fr;
@@ -919,7 +1299,7 @@ select.custom-select:focus {
   }
   .console-card {
     min-height: auto;
-    padding: 18px 16px;
+    padding: 14px 14px;
   }
   .banasthali-header-img {
     height: 44px;
@@ -928,25 +1308,755 @@ select.custom-select:focus {
     padding: 12px 16px 24px;
   }
   .scenic-wrapper::before {
-    top: -14vh;
-    height: 124vh;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    background-image: 
+      linear-gradient(to bottom, 
+        rgba(251, 246, 237, 0.05) 0%, 
+        rgba(251, 246, 237, 0.0) 30%, 
+        rgba(251, 246, 237, 0.16) 70%, 
+        rgba(251, 246, 237, 0.36) 100%),
+      url('/bg_rajasthan_mobile.jpg');
+    background-position: center top;
+    background-repeat: no-repeat;
+    background-size: cover;
   }
 }
 
-@media (max-width: 520px) {
-  .language-selectors-strip {
-    grid-template-columns: 1fr 30px 1fr;
-    gap: 6px;
+/* Mobile Widths (<=768px): Vertical Stack, 100% width, min-width: 0, no horizontal overflow */
+@media (max-width: 768px) {
+  .workspace-grid {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    gap: 14px;
   }
-  select.custom-select {
-    padding: 8px 24px 8px 8px;
-    font-size: 12px;
+  .console-card {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    min-height: auto;
+    padding: 14px 14px;
+    box-sizing: border-box;
+  }
+  .cards-connector-arrow {
+    transform: rotate(90deg);
+    margin: 0 auto;
+    width: 28px;
+    height: 28px;
+    pointer-events: none;
+    flex-shrink: 0;
+  }
+  /* Single correctly-sized signature recording microphone button */
+  .mic-waveform-studio {
+    min-height: 142px;
+    padding: 12px 10px;
+    width: 100%;
+    box-sizing: border-box;
+  }
+  .mic-signature-btn {
+    width: 58px;
+    height: 58px;
+    border-width: 3px;
+  }
+  .mic-signature-btn svg {
+    width: 24px;
+    height: 24px;
+  }
+  .mic-signature-btn.recording svg {
+    width: 18px;
+    height: 18px;
+  }
+  .mic-signature-btn.idle {
+    animation: roseIdleHaloMobile 2.5s ease-in-out infinite;
+  }
+  .mic-signature-stage {
+    padding: 2px 0 4px;
+  }
+  /* Lightweight backdrop on mobile without expensive blur */
+  .banasthali-fact-backdrop {
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    background: rgba(254, 249, 242, 0.52);
+  }
+}
+
+@media (max-width: 600px) {
+  .content-container {
+    padding: 10px 14px 20px;
+    width: 100%;
+    box-sizing: border-box;
+  }
+  .navbar {
+    padding: 4px 0 10px;
+    gap: 8px;
+    justify-content: space-between;
+  }
+  .nav-pill-badge {
+    padding: 4px 14px 4px 6px;
+    gap: 8px;
+  }
+  .nav-logo-circle {
+    width: 36px;
+    height: 36px;
   }
   .nav-brand-title {
-    font-size: 21px;
+    font-size: 19px;
+  }
+  .nav-divider,
+  .nav-tagline {
+    display: none;
+  }
+  .banasthali-header-badge {
+    padding: 4px 12px 4px 10px;
   }
   .banasthali-header-img {
-    height: 38px;
+    height: 34px;
+  }
+  .hero-block {
+    padding: 8px 0 8px;
+  }
+  .rajasthan-eyebrow {
+    font-size: 10px;
+    letter-spacing: 1.8px;
+  }
+  .hero-title-img {
+    width: min(280px, 85vw);
+  }
+  .hero-tagline {
+    font-size: 12.5px;
+  }
+}
+
+@media (max-width: 480px) {
+  .language-selectors-strip {
+    grid-template-columns: 1fr 28px 1fr;
+    gap: 4px;
+    margin: 8px 0 10px;
+  }
+  select.custom-select {
+    padding: 7px 22px 7px 8px;
+    font-size: 11.5px;
+    width: 100%;
+    min-width: 0;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+  }
+  .swap-button-circle {
+    width: 28px;
+    height: 33px;
+  }
+  .card-voice-footer {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    align-items: center;
+    margin-top: 8px;
+    padding-top: 8px;
+  }
+  .card-voice-footer .text-action-btn,
+  .card-voice-footer .primary-translate-trigger {
+    width: 100%;
+    text-align: center;
+    justify-content: center;
+    padding: 8px 4px;
+    font-size: 11px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .transcript-section-card {
+    min-height: 72px;
+    padding: 6px 8px 5px;
+  }
+  .transcript-content-text {
+    font-size: 12px;
+    min-height: 30px;
+  }
+  .translated-voice-player {
+    padding: 6px 8px;
+    gap: 6px;
+  }
+  .voice-motif-badge {
+    width: 26px;
+    height: 26px;
+  }
+  .player-controls-row {
+    gap: 5px;
+  }
+  .play-pause-btn {
+    width: 26px;
+    height: 26px;
+  }
+  .player-time-badge {
+    font-size: 9px;
+  }
+  .speed-pill-btn {
+    padding: 2px 5px;
+    font-size: 9px;
+  }
+  .footer-creed {
+    font-size: 8px;
+    letter-spacing: 0.8px;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 4px;
+  }
+}
+
+@media (max-width: 360px) {
+  .content-container {
+    padding: 8px 10px 16px;
+  }
+  .console-card {
+    padding: 12px 10px;
+  }
+  .card-top-name {
+    font-size: 17px;
+  }
+  .card-top-desc {
+    font-size: 11px;
+  }
+  .card-top-icon {
+    width: 32px;
+    height: 32px;
+  }
+  .mic-signature-btn {
+    width: 52px;
+    height: 52px;
+  }
+  .mic-signature-btn svg {
+    width: 20px;
+    height: 20px;
+  }
+  .mic-waveform-studio {
+    min-height: 130px;
+    padding: 10px 8px;
+  }
+  .card-voice-footer .text-action-btn,
+  .card-voice-footer .primary-translate-trigger {
+    font-size: 10.5px;
+    padding: 7px 2px;
+  }
+}
+
+/* ==========================================================================
+   BANASTHALI FUN FACTS VINTAGE POSTAGE-STAMP POSTCARD OVERLAY
+   Inspired by Rajasthan heritage, vintage Indian postage stamps & postcards
+   ========================================================================== */
+
+/* Soft ivory/peach translucent backdrop that softly lightens and blurs the page */
+.banasthali-fact-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 994;
+  background: radial-gradient(
+    ellipse at 50% 50%,
+    rgba(255, 250, 243, 0.48) 0%,
+    rgba(252, 240, 230, 0.36) 65%,
+    rgba(248, 230, 218, 0.28) 100%
+  );
+  backdrop-filter: blur(1.5px);
+  -webkit-backdrop-filter: blur(1.5px);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 220ms ease;
+}
+
+.banasthali-fact-backdrop.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.banasthali-fact-backdrop.dismissing {
+  opacity: 0;
+  transition: opacity 190ms ease;
+  pointer-events: none;
+}
+
+/* Floating Overlay Container: Centered in the middle of viewport */
+.banasthali-fact-overlay {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 999;
+  width: calc(100% - 32px);
+  max-width: 580px;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 220ms cubic-bezier(0.16, 1, 0.3, 1), transform 220ms cubic-bezier(0.16, 1, 0.3, 1);
+  box-sizing: border-box;
+}
+
+.banasthali-fact-overlay.active {
+  opacity: 1;
+  transform: translate(-50%, -50%);
+  pointer-events: auto;
+}
+
+.banasthali-fact-overlay.dismissing {
+  opacity: 0;
+  transform: translate(-50%, calc(-50% - 6px));
+  transition: opacity 190ms ease, transform 190ms ease;
+  pointer-events: none;
+}
+
+/* Wrapper casting delicate drop shadow around the exact scalloped edges */
+/* Gentle floating/bobbing in the air animation */
+.vintage-postage-stamp-wrap {
+  width: 100%;
+  filter: drop-shadow(0 14px 34px rgba(78, 38, 30, 0.16)) drop-shadow(0 3px 8px rgba(78, 38, 30, 0.08));
+  pointer-events: auto;
+  animation: stampFloatingBreeze 5.5s ease-in-out infinite alternate;
+  will-change: transform;
+}
+
+@keyframes stampFloatingBreeze {
+  0% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  33% {
+    transform: translateY(-3.5px) rotate(0.35deg);
+  }
+  66% {
+    transform: translateY(2px) rotate(-0.3deg);
+  }
+  100% {
+    transform: translateY(-2px) rotate(0.2deg);
+  }
+}
+
+/* --------------------------------------------------------------------------
+   THE VINTAGE POSTAGE STAMP SURFACE
+   Perforated scalloped teeth along all 4 perimeter edges
+   Warm cream/ivory parchment texture with fine dashed inner postal border
+   -------------------------------------------------------------------------- */
+.vintage-postage-stamp {
+  position: relative;
+  width: 100%;
+  background-color: #FAF4EA;
+  background-image:
+    radial-gradient(ellipse at 15% 25%, rgba(255, 255, 255, 0.75) 0%, transparent 60%),
+    linear-gradient(145deg, #FAF5EB 0%, #F5ECDD 100%);
+  padding: 8px;
+  box-sizing: border-box;
+
+  /* CSS Mask generating authentic circular perforation scoops along perimeter */
+  --r: 4.5px; /* radius of scallop cutout */
+  --p: 15px;  /* pitch between scallop centers */
+  -webkit-mask:
+    radial-gradient(circle var(--r) at var(--r) 50%, #0000 98%, #000) 0 0 / calc(2 * var(--r)) var(--p) repeat-y,
+    radial-gradient(circle var(--r) at calc(100% - var(--r)) 50%, #0000 98%, #000) 100% 0 / calc(2 * var(--r)) var(--p) repeat-y,
+    radial-gradient(circle var(--r) at 50% var(--r), #0000 98%, #000) 0 0 / var(--p) calc(2 * var(--r)) repeat-x,
+    radial-gradient(circle var(--r) at 50% calc(100% - var(--r)), #0000 98%, #000) 0 100% / var(--p) calc(2 * var(--r)) repeat-x,
+    linear-gradient(#000, #000) calc(2 * var(--r)) calc(2 * var(--r)) / calc(100% - 4 * var(--r)) calc(100% - 4 * var(--r)) no-repeat;
+  mask:
+    radial-gradient(circle var(--r) at var(--r) 50%, #0000 98%, #000) 0 0 / calc(2 * var(--r)) var(--p) repeat-y,
+    radial-gradient(circle var(--r) at calc(100% - var(--r)) 50%, #0000 98%, #000) 100% 0 / calc(2 * var(--r)) var(--p) repeat-y,
+    radial-gradient(circle var(--r) at 50% var(--r), #0000 98%, #000) 0 0 / var(--p) calc(2 * var(--r)) repeat-x,
+    radial-gradient(circle var(--r) at 50% calc(100% - var(--r)), #0000 98%, #000) 0 100% / var(--p) calc(2 * var(--r)) repeat-x,
+    linear-gradient(#000, #000) calc(2 * var(--r)) calc(2 * var(--r)) / calc(100% - 4 * var(--r)) calc(100% - 4 * var(--r)) no-repeat;
+  -webkit-mask-composite: source-over;
+  mask-composite: add;
+}
+
+/* Inner framed area inside stamp */
+.stamp-inner-frame {
+  border: 1px dashed rgba(196, 115, 94, 0.38);
+  border-radius: 4px;
+  padding: 10px 14px 10px 10px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  position: relative;
+  background-color: rgba(255, 253, 249, 0.35);
+  box-sizing: border-box;
+}
+
+/* Left Column: Vintage Chhatri Pavilion Architectural Etching */
+.stamp-illustration-pane {
+  width: 105px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-right: 1px dashed rgba(196, 115, 94, 0.22);
+  padding-right: 10px;
+}
+
+.stamp-chhatri-img {
+  width: 100%;
+  height: auto;
+  max-height: 130px;
+  object-fit: contain;
+  mix-blend-mode: multiply;
+  filter: contrast(1.04);
+}
+
+/* Right Column: Editorial Postal Content */
+.stamp-content-pane {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-width: 0;
+  position: relative;
+}
+
+/* Header Row: Eyebrow + Vintage Postmark Cancellation Seal */
+.stamp-header-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 8px;
+  position: relative;
+  margin-bottom: 2px;
+}
+
+.stamp-eyebrow {
+  font-family: var(--font-sans);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 1.4px;
+  text-transform: uppercase;
+  color: #872B3C;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  line-height: 1.2;
+}
+
+.stamp-glyph {
+  font-size: 9px;
+  color: #C4735E;
+}
+
+.stamp-postmark-box {
+  position: absolute;
+  top: -8px;
+  right: -6px;
+  width: 74px;
+  pointer-events: none;
+}
+
+.stamp-postmark-img {
+  width: 100%;
+  height: auto;
+  mix-blend-mode: multiply;
+  opacity: 0.82;
+  filter: contrast(1.08);
+}
+
+/* Fact Title */
+.stamp-fact-title {
+  font-family: var(--font-serif);
+  font-size: 20px;
+  font-weight: 600;
+  color: #2D1D22;
+  line-height: 1.25;
+  margin: 3px 0 5px;
+  letter-spacing: -0.2px;
+}
+
+/* Fact Description */
+.stamp-fact-body {
+  font-family: var(--font-sans);
+  font-size: 12.5px;
+  line-height: 1.5;
+  color: #4D413D;
+  margin: 0 0 8px;
+  padding-right: 18px;
+}
+
+.stamp-fact-body strong {
+  color: #24161B;
+  font-weight: 600;
+}
+
+/* Footer Row: Counter & Discover Button */
+.stamp-footer-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-top: 2px;
+}
+
+.stamp-counter-strip {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-family: var(--font-sans);
+  font-size: 11px;
+  font-weight: 600;
+  color: #7A6963;
+  letter-spacing: 0.5px;
+}
+
+.stamp-counter-diamond {
+  font-size: 7.5px;
+  color: #C4735E;
+}
+
+.stamp-counter-dash {
+  width: 20px;
+  height: 1px;
+  background: rgba(196, 115, 94, 0.4);
+}
+
+.stamp-screen-hint {
+  font-family: var(--font-sans);
+  font-size: 10.5px;
+  font-weight: 500;
+  color: #8C7971;
+  font-style: italic;
+  letter-spacing: 0.2px;
+}
+
+/* Discover Another Pill Button */
+.stamp-discover-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  background: rgba(255, 252, 247, 0.90);
+  border: 1px solid rgba(135, 43, 60, 0.35);
+  border-radius: 999px;
+  padding: 3.5px 12px 3.5px 4.5px;
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: 13px;
+  color: #872B3C;
+  cursor: pointer;
+  box-shadow: 0 1px 4px rgba(78, 38, 30, 0.05);
+  transition: all 180ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.stamp-discover-btn:hover {
+  background: #FFF;
+  border-color: #872B3C;
+  box-shadow: 0 3px 8px rgba(135, 43, 60, 0.14);
+  transform: translateY(-1px);
+}
+
+.stamp-btn-circle-icon {
+  width: 19px;
+  height: 19px;
+  border-radius: 50%;
+  background: #872B3C;
+  color: #FFF;
+  display: grid;
+  place-items: center;
+  font-size: 9.5px;
+  line-height: 1;
+  font-style: normal;
+  transition: transform 180ms ease;
+}
+
+.stamp-discover-btn:hover .stamp-btn-circle-icon {
+  transform: translateX(2px);
+}
+
+.stamp-discover-btn:focus-visible {
+  outline: 2px solid #872B3C;
+  outline-offset: 2px;
+}
+
+/* --------------------------------------------------------------------------
+   Phase 1 (0–2s): Compact Vintage Stamp Dispatch Note
+   "Translating your voice…" with soundwave animation
+   -------------------------------------------------------------------------- */
+.vintage-postage-stamp.loading-stamp {
+  max-width: 380px;
+  margin: 0 auto;
+}
+
+.stamp-inner-frame.loading-frame {
+  padding: 12px 18px;
+  justify-content: center;
+  gap: 14px;
+}
+
+.stamp-loading-wave-cluster {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  height: 20px;
+}
+
+.stamp-wave-arc {
+  width: 3px;
+  border-radius: 3px;
+  animation: stampWavePulse 1.2s ease-in-out infinite alternate;
+}
+
+.stamp-wave-arc.arc-1 {
+  height: 9px;
+  background-color: #872B3C;
+  animation-delay: 0s;
+}
+
+.stamp-wave-arc.arc-2 {
+  height: 18px;
+  background-color: #D99A3D;
+  animation-delay: 0.18s;
+}
+
+.stamp-wave-arc.arc-3 {
+  height: 14px;
+  background-color: #872B3C;
+  animation-delay: 0.36s;
+}
+
+.stamp-wave-arc.arc-4 {
+  height: 8px;
+  background-color: #C4735E;
+  animation-delay: 0.54s;
+}
+
+@keyframes stampWavePulse {
+  0% { transform: scaleY(0.45); opacity: 0.5; }
+  100% { transform: scaleY(1); opacity: 1; }
+}
+
+.stamp-loading-text-col {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.stamp-eyebrow-mini {
+  font-family: var(--font-sans);
+  font-size: 9.5px;
+  font-weight: 700;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+  color: #872B3C;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.stamp-loading-caption {
+  font-family: var(--font-sans);
+  font-size: 13.5px;
+  font-weight: 500;
+  color: #2D1D22;
+  letter-spacing: -0.2px;
+}
+
+/* Responsive: Mobile Optimization for Postcard */
+@media (max-width: 640px) {
+  .banasthali-fact-overlay {
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: calc(100% - 32px);
+    max-width: 480px;
+  }
+  .banasthali-fact-overlay.active {
+    transform: translate(-50%, -50%);
+  }
+  .banasthali-fact-overlay.dismissing {
+    transform: translate(-50%, calc(-50% - 6px));
+  }
+  .vintage-postage-stamp {
+    padding: 6px;
+    --r: 3.5px;
+    --p: 12px;
+  }
+  .stamp-inner-frame {
+    padding: 8px 10px 8px 8px;
+    gap: 8px;
+  }
+  .stamp-illustration-pane {
+    width: 68px;
+    padding-right: 6px;
+  }
+  .stamp-chhatri-img {
+    max-height: 98px;
+  }
+  .stamp-fact-title {
+    font-size: 15.5px;
+    margin: 2px 0 4px;
+    line-height: 1.25;
+  }
+  .stamp-fact-body {
+    font-size: 11px;
+    line-height: 1.45;
+    margin: 0 0 6px;
+    padding-right: 0;
+  }
+  .stamp-postmark-box {
+    width: 44px;
+    top: -4px;
+    right: -2px;
+    opacity: 0.65;
+  }
+  .stamp-footer-row {
+    margin-top: 2px;
+    gap: 8px;
+  }
+  .stamp-counter-dash {
+    width: 14px;
+  }
+  .stamp-discover-btn {
+    font-size: 11.5px;
+    padding: 3px 9px 3px 4px;
+    gap: 5px;
+    flex-shrink: 0;
+  }
+  .stamp-btn-circle-icon {
+    width: 17px;
+    height: 17px;
+    font-size: 8.5px;
+  }
+}
+
+@media (max-width: 380px) {
+  .stamp-inner-frame {
+    padding: 6px 6px 5px;
+    gap: 6px;
+  }
+  .stamp-illustration-pane {
+    width: 52px;
+    padding-right: 4px;
+  }
+  .stamp-chhatri-img {
+    max-height: 80px;
+  }
+  .stamp-postmark-box {
+    display: none; /* Hide nonessential decorative seal on small screens to prevent overlap */
+  }
+  .stamp-eyebrow {
+    font-size: 8.5px;
+    letter-spacing: 0.6px;
+  }
+  .stamp-fact-title {
+    font-size: 14px;
+    margin: 1px 0 3px;
+  }
+  .stamp-fact-body {
+    font-size: 10.5px;
+    line-height: 1.38;
+    margin: 0 0 4px;
+  }
+  .stamp-counter-dash {
+    width: 10px;
+  }
+  .stamp-discover-btn {
+    font-size: 10.5px;
+    padding: 2.5px 7px 2.5px 3.5px;
+  }
+  .stamp-btn-circle-icon {
+    width: 15px;
+    height: 15px;
+    font-size: 7.5px;
   }
 }
 

@@ -25,8 +25,8 @@ export const CONFIG = {
       import.meta.env.VITE_API_KEY) ||
     "",
 
-  // Network timeout in milliseconds (45 seconds default)
-  TIMEOUT_MS: 45000,
+  // Network timeout in milliseconds (180 seconds to allow ASR + NMT + TTS neural pipeline)
+  TIMEOUT_MS: 180000,
 
   // Kiosk mode idle reset timer in seconds (60s as per spec)
   KIOSK_IDLE_SECONDS: 60,

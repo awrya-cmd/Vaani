@@ -1,5 +1,6 @@
 import React from "react";
 import { ALL_LANGUAGES } from "../constants/languages";
+import JaaliCorners from "./JaaliCorners";
 
 export default function VoiceCard({
   sourceLang,
@@ -11,8 +12,7 @@ export default function VoiceCard({
   selectedFileName,
   timerSeconds,
   formatTime,
-  canvasLeftRef,
-  canvasRightRef,
+  canvasWaveRef,
   fileInputRef,
   isSwapRotated,
   onSwap,
@@ -21,27 +21,31 @@ export default function VoiceCard({
   onFileUpload,
   onTranslate,
   hasAudio,
+  translationStage,
 }) {
   return (
     <section className="console-card voice-card" id="cardVoice">
       <div className="jaali-accent-top" aria-hidden="true" />
+      <JaaliCorners />
 
       {/* Card Header */}
       <div className="card-top-head">
-        <div className="card-top-icon rose-icon">
+        <div className="card-top-icon rose-icon" aria-hidden="true">
           <svg
             width="18"
             height="18"
             viewBox="0 0 24 24"
             fill="none"
             stroke="currentColor"
-            strokeWidth="2"
+            strokeWidth="2.2"
             strokeLinecap="round"
             strokeLinejoin="round"
           >
-            <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z" />
-            <path d="M19 10v2a7 7 0 0 1-14 0v-2" />
-            <line x1="12" x2="12" y1="19" y2="22" />
+            <path d="M12 3v18" />
+            <path d="M16 7v10" />
+            <path d="M8 7v10" />
+            <path d="M20 11v2" />
+            <path d="M4 11v2" />
           </svg>
         </div>
         <div className="card-top-titles">
@@ -60,9 +64,10 @@ export default function VoiceCard({
             value={sourceLang}
             onChange={(e) => setSourceLang(e.target.value)}
           >
+            <option value="auto">Auto Detect</option>
             {ALL_LANGUAGES.map((lang) => (
               <option key={lang.code} value={lang.code}>
-                {lang.flag} {lang.name}
+                {lang.name}
               </option>
             ))}
           </select>
@@ -101,34 +106,28 @@ export default function VoiceCard({
             value={targetLang}
             onChange={(e) => setTargetLang(e.target.value)}
           >
-            {ALL_LANGUAGES.filter((l) => l.code !== "auto").map((lang) => (
+            {ALL_LANGUAGES.map((lang) => (
               <option key={lang.code} value={lang.code}>
-                {lang.flag} {lang.name}
+                {lang.name}
               </option>
             ))}
           </select>
         </div>
       </div>
 
-      {/* Central Microphone Console with Flanking Waveforms */}
+      {/* Signature Microphone Recording Console Studio */}
       <div className="mic-waveform-studio">
-        <div className="mic-stage-row">
-          <canvas
-            ref={canvasLeftRef}
-            id="waveLeft"
-            className="waveform-canvas"
-            aria-hidden="true"
-          />
-
+        {/* Prominent Circular Microphone Button (72px) with Rose Halo */}
+        <div className="mic-signature-stage">
           <button
             type="button"
-            className={`mic-glow-button ${
-              status === "recording" ? "recording" : ""
-            }`}
+            className={`mic-signature-btn ${
+              status === "recording" ? "recording" : "idle"
+            } ${hasAudio && status !== "recording" ? "has-audio" : ""}`}
             id="recordBtn"
             onClick={status === "recording" ? onStopRecording : onStartRecording}
             aria-label={
-              status === "recording" ? "Stop speaking" : "Start speaking"
+              status === "recording" ? "Stop recording" : "Start speaking"
             }
             title={
               status === "recording"
@@ -137,17 +136,17 @@ export default function VoiceCard({
             }
           >
             {status === "recording" ? (
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
-                <rect x="5" y="5" width="14" height="14" rx="2" />
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
+                <rect x="5" y="5" width="14" height="14" rx="3" />
               </svg>
             ) : (
               <svg
-                width="22"
-                height="22"
+                width="28"
+                height="28"
                 viewBox="0 0 24 24"
                 fill="none"
                 stroke="currentColor"
-                strokeWidth="2"
+                strokeWidth="2.2"
                 strokeLinecap="round"
                 strokeLinejoin="round"
               >
@@ -157,41 +156,60 @@ export default function VoiceCard({
               </svg>
             )}
           </button>
+        </div>
 
+        {/* Live Web Audio Waveform with Rounded Bars (Collapses on stop) */}
+        <div
+          className={`mic-waveform-collapsible ${
+            status === "recording" ? "expanded" : "collapsed"
+          }`}
+          aria-hidden={status !== "recording"}
+        >
           <canvas
-            ref={canvasRightRef}
-            id="waveRight"
-            className="waveform-canvas"
-            aria-hidden="true"
+            ref={canvasWaveRef}
+            id="liveWaveformCanvas"
+            className="live-waveform-canvas"
+            aria-label="Microphone live waveform"
           />
         </div>
 
-        <div className="mic-title-caption" id="micCaption">
-          {status === "recording"
-            ? "Listening to your voice…"
-            : status === "translating"
-            ? "Translating speech…"
-            : selectedFileName
-            ? selectedFileName
-            : hasAudio
-            ? "Audio ready"
-            : "Click to start speaking"}
-        </div>
-
-        <div className="mic-hint-caption" id="micSubcaption">
-          {status === "recording"
-            ? "Tap to complete your speech"
-            : status === "translating"
-            ? "Processing voice model at server…"
-            : selectedFileName
-            ? "WAV audio ready. Click 'Translate speech'."
-            : "Your voice will be translated in real time"}
-        </div>
-
-        {status === "recording" && (
-          <div className="mic-timer-pill" id="timerPill">
-            <span className="mic-timer-dot pulsing" id="timerDot" />
-            <span id="timerText">{formatTime(timerSeconds)}</span>
+        {/* Dynamic Status / Feedback Display beneath Mic & Waveform */}
+        {status === "recording" ? (
+          <div className="mic-live-meta">
+            <div className="mic-timer-pill" id="timerPill">
+              <span className="mic-timer-dot pulsing" id="timerDot" />
+              <span id="timerText">{formatTime(timerSeconds)}</span>
+            </div>
+            <div className="mic-title-caption live-caption" id="micCaption">
+              Listening to your voice…
+            </div>
+            <div className="mic-hint-caption" id="micSubcaption">
+              Tap the microphone to finish speaking
+            </div>
+          </div>
+        ) : hasAudio ? (
+          <div className="mic-collapsed-ready-area">
+            <div className="compact-audio-ready-pill" id="audioReadyBadge">
+              <span className="ready-indicator-dot" />
+              <span className="ready-file-title" id="micCaption">
+                {selectedFileName || "Audio ready"}
+              </span>
+              <span className="ready-action-tag">Ready to translate</span>
+            </div>
+            <div className="mic-hint-caption ready-hint" id="micSubcaption">
+              Click &lsquo;Translate speech &nearr;&rsquo; or record again
+            </div>
+          </div>
+        ) : (
+          <div className="mic-idle-meta">
+            <div className="mic-title-caption" id="micCaption">
+              {status === "translating" ? `${translationStage}…` : "Click to speak"}
+            </div>
+            <div className="mic-hint-caption" id="micSubcaption">
+              {status === "translating"
+                ? "Processing speech model at server…"
+                : "Or press Spacebar to start speaking"}
+            </div>
           </div>
         )}
       </div>

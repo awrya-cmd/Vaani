@@ -1,25 +1,25 @@
 export const ALL_LANGUAGES = [
-  { code: "auto", name: "Auto Detect", flag: "🌐" },
-  { code: "hi", name: "Hindi", flag: "🇮🇳" },
-  { code: "en", name: "English", flag: "🇬🇧" },
-  { code: "ru", name: "Russian", flag: "🇷🇺" },
-  { code: "zh", name: "Chinese", flag: "🇨🇳" },
-  { code: "pt", name: "Portuguese", flag: "🇧🇷" },
-  { code: "ar", name: "Arabic", flag: "🇸🇦", rtl: true },
-  { code: "bn", name: "Bengali", flag: "🇮🇳" },
-  { code: "ta", name: "Tamil", flag: "🇮🇳" },
-  { code: "te", name: "Telugu", flag: "🇮🇳" },
-  { code: "mr", name: "Marathi", flag: "🇮🇳" },
-  { code: "gu", name: "Gujarati", flag: "🇮🇳" },
-  { code: "ur", name: "Urdu", flag: "🇵🇰", rtl: true },
-  { code: "fr", name: "French", flag: "🇫🇷" },
-  { code: "es", name: "Spanish", flag: "🇪🇸" },
-  { code: "af", name: "Afrikaans", flag: "🇿🇦" },
-  { code: "fa", name: "Persian", flag: "🇮🇷", rtl: true },
-  { code: "sw", name: "Swahili", flag: "🇰🇪" },
+  { code: "af", name: "Afrikaans" },
+  { code: "ar", name: "Arabic", rtl: true },
+  { code: "zh", name: "Chinese" },
+  { code: "en", name: "English" },
+  { code: "es", name: "Spanish" },
+  { code: "fa", name: "Persian", rtl: true },
+  { code: "hi", name: "Hindi" },
+  { code: "id", name: "Indonesian" },
+  { code: "kk", name: "Kazakh" },
+  { code: "ms", name: "Malay" },
+  { code: "pt", name: "Portuguese" },
+  { code: "ru", name: "Russian" },
+  { code: "sw", name: "Swahili" },
+  { code: "th", name: "Thai" },
+  { code: "uz", name: "Uzbek" },
+  { code: "vi", name: "Vietnamese" },
 ];
 
-export const RTL_LANG_CODES = ["ar", "ur", "fa"];
+export const RTL_LANG_CODES = ["ar", "fa"];
 
-export const getLangObj = (code) =>
-  ALL_LANGUAGES.find((l) => l.code === code) || { code, name: code, flag: "🌐" };
+export const getLangObj = (code) => {
+  if (code === "auto") return { code: "auto", name: "Auto Detect" };
+  return ALL_LANGUAGES.find((l) => l.code === code) || { code, name: code };
+};

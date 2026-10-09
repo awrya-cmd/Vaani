@@ -4,6 +4,7 @@ import Hero from "./components/Hero";
 import VoiceCard from "./components/VoiceCard";
 import ConversationCard from "./components/ConversationCard";
 import Footer from "./components/Footer";
+import BanasthaliFactOverlay from "./components/BanasthaliFactOverlay";
 import { CONFIG } from "./config";
 import { ALL_LANGUAGES, RTL_LANG_CODES, getLangObj } from "./constants/languages";
 import { formatTime, ensureWavBlob } from "./utils/audio";
@@ -11,6 +12,7 @@ import { formatTime, ensureWavBlob } from "./utils/audio";
 export default function App() {
   const [sourceLang, setSourceLang] = useState("auto");
   const [targetLang, setTargetLang] = useState("en");
+  const [detectedLangCode, setDetectedLangCode] = useState("hi");
 
   // Status: 'ready' | 'recording' | 'recorded' | 'translating' | 'translated' | 'error'
   const [status, setStatus] = useState("ready");
@@ -18,7 +20,7 @@ export default function App() {
 
   const [inputTranscript, setInputTranscript] = useState("");
   const [outputTranscript, setOutputTranscript] = useState("");
-  const [detectedLangCode, setDetectedLangCode] = useState("hi");
+  const [translationStage, setTranslationStage] = useState("Understanding");
   const [audioUrl, setAudioUrl] = useState(null);
   const [ttsEngine, setTtsEngine] = useState("");
 
@@ -44,77 +46,76 @@ export default function App() {
   const audioContextRef = useRef(null);
   const analyserRef = useRef(null);
   const animFrameRef = useRef(null);
-  const canvasLeftRef = useRef(null);
-  const canvasRightRef = useRef(null);
+  const canvasWaveRef = useRef(null);
   const audioElementRef = useRef(null);
 
-  // Flanking Waveform Visualization
-  const drawFlankingWaves = useCallback(() => {
-    const cLeft = canvasLeftRef.current;
-    const cRight = canvasRightRef.current;
+  // Real-Time Live Waveform Visualizer using Web Audio API frequency/amplitude data
+  const drawWaveform = useCallback(() => {
+    const canvas = canvasWaveRef.current;
     const analyser = analyserRef.current;
-    if (!cLeft || !cRight || !analyser) return;
+    if (!canvas || !analyser) return;
 
-    const ctxL = cLeft.getContext("2d");
-    const ctxR = cRight.getContext("2d");
-    const values = new Uint8Array(analyser.frequencyBinCount);
+    const ctx = canvas.getContext("2d");
+    const bufferLength = analyser.frequencyBinCount;
+    const values = new Uint8Array(bufferLength);
     analyser.getByteFrequencyData(values);
 
-    const renderBars = (canvas, ctx, isLeft) => {
-      const w = canvas.clientWidth;
-      const h = canvas.clientHeight;
-      ctx.clearRect(0, 0, w, h);
-      const bars = 16;
-      const barW = 3;
-      const gap = (w - bars * barW) / (bars - 1);
-      const mid = h / 2;
+    const w = canvas.clientWidth;
+    const h = canvas.clientHeight;
+    ctx.clearRect(0, 0, w, h);
 
-      for (let i = 0; i < bars; i++) {
-        const valIdx = isLeft ? bars - 1 - i : i;
-        const amp = (values[valIdx * 2] || 0) / 255.0;
-        const barH = Math.max(3, amp * (h * 0.85));
-        const x = i * (barW + gap);
+    const bars = 28;
+    const barW = 4;
+    const gap = (w - bars * barW) / (bars - 1);
+    const mid = h / 2;
 
-        ctx.fillStyle = amp > 0.45 ? "#D99A3D" : "#C75D72";
-        ctx.beginPath();
-        if (ctx.roundRect) ctx.roundRect(x, mid - barH / 2, barW, barH, 2);
-        else ctx.rect(x, mid - barH / 2, barW, barH);
-        ctx.fill();
-      }
-    };
+    for (let i = 0; i < bars; i++) {
+      // Symmetrical amplitude radiating from the center outwards
+      const distFromCenter = Math.abs(i - (bars - 1) / 2);
+      const freqIdx = Math.min(
+        bufferLength - 1,
+        Math.floor((1 - distFromCenter / (bars / 2)) * (bufferLength * 0.72))
+      );
+      const rawAmp = (values[freqIdx] || 0) / 255.0;
+      const barH = Math.max(3.5, rawAmp * (h * 0.88));
+      const x = i * (barW + gap);
 
-    renderBars(cLeft, ctxL, true);
-    renderBars(cRight, ctxR, false);
+      // Dynamic palette: dusty rose transitioning into vibrant marigold at higher amplitudes
+      ctx.fillStyle = rawAmp > 0.40 ? "#D99A3D" : "#C75D72";
+      ctx.beginPath();
+      if (ctx.roundRect) ctx.roundRect(x, mid - barH / 2, barW, barH, 2);
+      else ctx.rect(x, mid - barH / 2, barW, barH);
+      ctx.fill();
+    }
 
-    animFrameRef.current = requestAnimationFrame(drawFlankingWaves);
+    animFrameRef.current = requestAnimationFrame(drawWaveform);
   }, []);
 
-  const stopFlankingWaves = useCallback(() => {
+  const stopWaveform = useCallback(() => {
     if (animFrameRef.current) {
       cancelAnimationFrame(animFrameRef.current);
       animFrameRef.current = null;
     }
-    [canvasLeftRef.current, canvasRightRef.current].forEach((c) => {
-      if (c) {
-        const ctx = c.getContext("2d");
-        ctx.clearRect(0, 0, c.clientWidth, c.clientHeight);
-      }
-    });
+    const canvas = canvasWaveRef.current;
+    if (canvas) {
+      const ctx = canvas.getContext("2d");
+      ctx.clearRect(0, 0, canvas.clientWidth, canvas.clientHeight);
+    }
   }, []);
 
-  // Resize canvases
-  const resizeCanvases = () => {
+  // Resize live waveform canvas according to device pixel ratio
+  const resizeCanvas = useCallback(() => {
+    const canvas = canvasWaveRef.current;
+    if (!canvas) return;
     const dpr = window.devicePixelRatio || 1;
-    [canvasLeftRef.current, canvasRightRef.current].forEach((c) => {
-      if (c) {
-        const r = c.getBoundingClientRect();
-        c.width = Math.max(1, r.width * dpr);
-        c.height = Math.max(1, r.height * dpr);
-        const ctx = c.getContext("2d");
-        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-      }
-    });
-  };
+    const r = canvas.getBoundingClientRect();
+    if (r.width > 0 && r.height > 0) {
+      canvas.width = Math.max(1, r.width * dpr);
+      canvas.height = Math.max(1, r.height * dpr);
+      const ctx = canvas.getContext("2d");
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    }
+  }, []);
 
   // Recording Controls
   const startRecording = async () => {
@@ -144,11 +145,6 @@ export default function App() {
           type: recorder.mimeType || "audio/webm",
         });
 
-        // Convert recorded audio to standard 16kHz mono WAV for backend compatibility
-        const wavData = await ensureWavBlob(recordedBlob);
-        audioBlobRef.current = wavData.blob;
-        setSelectedFileName("voice_recording.wav");
-
         if (streamRef.current) {
           streamRef.current.getTracks().forEach((t) => t.stop());
           streamRef.current = null;
@@ -158,8 +154,16 @@ export default function App() {
           audioContextRef.current = null;
         }
         analyserRef.current = null;
-        stopFlankingWaves();
+        stopWaveform();
+
+        // Convert recorded audio to standard 16kHz mono WAV for backend compatibility
+        const wavData = await ensureWavBlob(recordedBlob);
+        audioBlobRef.current = wavData.blob;
+        setSelectedFileName("voice_recording.wav");
         setStatus("recorded");
+
+        // Immediately begin translation request upon recording stop
+        executeTranslation(sourceLang, targetLang, wavData.blob, "voice_recording.wav");
       };
 
       recorder.start(200);
@@ -175,8 +179,10 @@ export default function App() {
       sourceNode.connect(analyser);
       analyserRef.current = analyser;
 
-      resizeCanvases();
-      drawFlankingWaves();
+      setTimeout(() => {
+        resizeCanvas();
+        drawWaveform();
+      }, 50);
 
       if (timerIntervalRef.current) clearInterval(timerIntervalRef.current);
       const startMs = Date.now();
@@ -213,7 +219,7 @@ export default function App() {
 
     setErrorMessage("");
     if (status === "recording") stopRecording();
-    stopFlankingWaves();
+    stopWaveform();
 
     try {
       setSelectedFileName(file.name);
@@ -232,7 +238,7 @@ export default function App() {
 
   const handleSwap = () => {
     setIsSwapRotated((prev) => !prev);
-    const newTarget = sourceLang === "auto" ? "en" : sourceLang;
+    const newTarget = sourceLang === "auto" ? (detectedLangCode || "hi") : sourceLang;
     const newSource = targetLang;
     setSourceLang(newSource);
     setTargetLang(newTarget);
@@ -242,27 +248,47 @@ export default function App() {
   };
 
   // Translation API Call with timeout and fallback
-  const executeTranslation = async (sLang = sourceLang, tLang = targetLang) => {
-    const rawAudio = audioBlobRef.current;
+  const executeTranslation = async (
+    sLang = sourceLang,
+    tLang = targetLang,
+    customBlob = null,
+    customFileName = null
+  ) => {
+    const rawAudio = customBlob || audioBlobRef.current;
     if (!rawAudio) return;
 
     setErrorMessage("");
     setStatus("translating");
+    setTranslationStage("Understanding");
+
+    // Progressive backend stage progression as permitted by server roundtrip
+    const stageTimer1 = setTimeout(() => {
+      setTranslationStage("Translating");
+    }, 1100);
+
+    const stageTimer2 = setTimeout(() => {
+      setTranslationStage("Preparing your audio");
+    }, 2500);
 
     try {
       // Ensure we have a valid WAV blob before dispatching
-      const wavPack = await ensureWavBlob(rawAudio);
+      const wavPack =
+        customBlob && customBlob.type === "audio/wav"
+          ? { blob: customBlob, filename: customFileName || "voice_recording.wav" }
+          : await ensureWavBlob(rawAudio);
       const audioWavBlob = wavPack.blob;
       const audioFileName = wavPack.filename || "audio.wav";
 
       const form = new FormData();
       form.append("audio", audioWavBlob, audioFileName);
 
-      // Resolve "auto" to a concrete language code before calling the API
+      // Resolve "auto" to concrete language code for FastAPI backend
       let actualSource =
         sLang === "auto" || !sLang
           ? detectedLangCode && detectedLangCode !== "auto"
             ? detectedLangCode
+            : tLang === "hi"
+            ? "en"
             : "hi"
           : sLang;
 
@@ -289,7 +315,8 @@ export default function App() {
 
       for (const endpoint of endpointsToTry) {
         const controller = new AbortController();
-        const timeoutId = setTimeout(() => controller.abort(), 40000); // 40s timeout
+        const timeoutMs = CONFIG?.TIMEOUT_MS || 180000; // 180s timeout (3 mins) for heavy neural models
+        const timeoutId = setTimeout(() => controller.abort(), timeoutMs);
 
         try {
           const resp = await fetch(endpoint, {
@@ -315,9 +342,9 @@ export default function App() {
         } catch (err) {
           clearTimeout(timeoutId);
           lastError = err;
-          // If aborted due to timeout, break immediately
+          // If aborted due to timeout, break immediately with informative message
           if (err.name === "AbortError") {
-            throw new Error("Request timed out after 40 seconds. Server may be busy.");
+            throw new Error("Translation is taking longer than expected. Please wait, the server may still be processing neural speech models.");
           }
           // If 400 Bad Request, do not retry other endpoint
           if (err.message && err.message.includes("HTTP 400")) {
@@ -325,6 +352,9 @@ export default function App() {
           }
         }
       }
+
+      clearTimeout(stageTimer1);
+      clearTimeout(stageTimer2);
 
       if (!data) {
         throw lastError || new Error("Failed to reach translation server.");
@@ -334,9 +364,12 @@ export default function App() {
       setOutputTranscript(data.translated_text || "");
       setTtsEngine(data.tts_engine || "");
 
-      if (data.source_text && sLang === "auto") {
-        setDetectedLangCode("hi");
+      if (data.source_language && data.source_language !== "auto") {
+        setDetectedLangCode(data.source_language);
+      } else if (data.detected_language && data.detected_language !== "auto") {
+        setDetectedLangCode(data.detected_language);
       }
+
 
       if (data.audio_base64) {
         const binary = atob(data.audio_base64);
@@ -359,6 +392,8 @@ export default function App() {
 
       setStatus("translated");
     } catch (err) {
+      clearTimeout(stageTimer1);
+      clearTimeout(stageTimer2);
       const serverDisplay =
         CONFIG?.DIRECT_SERVER_URL ||
         CONFIG?.SERVER_URL ||
@@ -451,10 +486,31 @@ export default function App() {
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [status]);
 
+  // Auto-scroll on phone to transcript & audio player once translation completes
   useEffect(() => {
-    window.addEventListener("resize", resizeCanvases);
+    if (status === "translated") {
+      const isMobile = window.innerWidth <= 768;
+      if (isMobile) {
+        const scrollTimer = setTimeout(() => {
+          const conversationSection =
+            document.getElementById("cardConversation") ||
+            document.querySelector(".conversation-card");
+          if (conversationSection) {
+            conversationSection.scrollIntoView({
+              behavior: "smooth",
+              block: "start",
+            });
+          }
+        }, 180);
+        return () => clearTimeout(scrollTimer);
+      }
+    }
+  }, [status]);
+
+  useEffect(() => {
+    window.addEventListener("resize", resizeCanvas);
     return () => {
-      window.removeEventListener("resize", resizeCanvases);
+      window.removeEventListener("resize", resizeCanvas);
       if (timerIntervalRef.current) clearInterval(timerIntervalRef.current);
       if (animFrameRef.current) cancelAnimationFrame(animFrameRef.current);
       if (streamRef.current)
@@ -463,9 +519,12 @@ export default function App() {
     };
   }, []);
 
-  const sourceLangObj = getLangObj(
-    sourceLang === "auto" ? detectedLangCode : sourceLang
-  );
+  const sourceLangObj =
+    sourceLang === "auto"
+      ? status === "translated" && detectedLangCode
+        ? { ...getLangObj(detectedLangCode), name: `${getLangObj(detectedLangCode).name} (Auto)` }
+        : { code: "auto", name: "Auto Detect" }
+      : getLangObj(sourceLang);
   const targetLangObj = getLangObj(targetLang);
 
   const isSourceRTL = RTL_LANG_CODES.includes(
@@ -477,6 +536,9 @@ export default function App() {
 
   return (
     <div className="scenic-wrapper">
+      {/* Subtle, non-blocking Banasthali Fun Facts floating heritage overlay */}
+      <BanasthaliFactOverlay isTranslating={status === "translating"} />
+
       <div className="content-container">
         {/* Navbar Header */}
         <Navbar />
@@ -497,8 +559,7 @@ export default function App() {
             selectedFileName={selectedFileName}
             timerSeconds={timerSeconds}
             formatTime={formatTime}
-            canvasLeftRef={canvasLeftRef}
-            canvasRightRef={canvasRightRef}
+            canvasWaveRef={canvasWaveRef}
             fileInputRef={fileInputRef}
             isSwapRotated={isSwapRotated}
             onSwap={handleSwap}
@@ -507,6 +568,7 @@ export default function App() {
             onFileUpload={handleFileUpload}
             onTranslate={() => executeTranslation()}
             hasAudio={Boolean(audioBlobRef.current)}
+            translationStage={translationStage}
           />
 
           {/* Center Connector Arrow */}
@@ -553,6 +615,8 @@ export default function App() {
             audioElementRef={audioElementRef}
             onTimeUpdate={handleTimeUpdate}
             onEnded={() => setIsPlaying(false)}
+            status={status}
+            translationStage={translationStage}
           />
         </main>
       </div>

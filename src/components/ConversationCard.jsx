@@ -1,5 +1,7 @@
 import React from "react";
 import { formatTime } from "../utils/audio";
+import JaaliCorners from "./JaaliCorners";
+import JaaliLoader from "./JaaliLoader";
 
 export default function ConversationCard({
   sourceLangObj,
@@ -27,10 +29,13 @@ export default function ConversationCard({
   audioElementRef,
   onTimeUpdate,
   onEnded,
+  status,
+  translationStage,
 }) {
   return (
     <section className="console-card conversation-card" id="cardConversation">
       <div className="jaali-accent-top" aria-hidden="true" />
+      <JaaliCorners />
 
       {/* Card Header */}
       <div className="card-top-head">
@@ -68,14 +73,7 @@ export default function ConversationCard({
           <div className="transcript-header-row">
             <span className="transcript-label-caps">WHAT YOU SAID</span>
             <div className="language-flag-pill" id="sourceMeta">
-              <span className="flag-emoji" id="sourceFlag">
-                {sourceLangObj.flag}
-              </span>
-              <span id="sourceLangLabel">
-                {sourceLang === "auto"
-                  ? `${sourceLangObj.name} (Detected)`
-                  : sourceLangObj.name}
-              </span>
+              <span id="sourceLangLabel">{sourceLangObj.name}</span>
             </div>
           </div>
 
@@ -135,29 +133,32 @@ export default function ConversationCard({
           <div className="transcript-header-row">
             <span className="transcript-label-caps">TRANSLATED TEXT</span>
             <div className="language-flag-pill" id="translatedMeta">
-              <span className="flag-emoji" id="targetFlag">
-                {targetLangObj.flag}
-              </span>
               <span id="targetLangLabel">{targetLangObj.name}</span>
             </div>
           </div>
 
-          <div
-            className={`transcript-content-text ${
-              !outputTranscript ? "empty" : ""
-            }`}
-            id="translatedText"
-            dir={isTargetRTL ? "rtl" : undefined}
-            aria-live="polite"
-          >
-            {outputTranscript || "Your translated text will appear here."}
-          </div>
+          {status === "translating" ? (
+            <div className="transcript-loading-state" id="translatingState">
+              <JaaliLoader stage={translationStage} />
+            </div>
+          ) : (
+            <div
+              className={`transcript-content-text ${
+                !outputTranscript ? "empty" : ""
+              } ${status === "translated" ? "fade-in" : ""}`}
+              id="translatedText"
+              dir={isTargetRTL ? "rtl" : undefined}
+              aria-live="polite"
+            >
+              {outputTranscript || "Your translated text will appear here."}
+            </div>
+          )}
 
           <button
             type="button"
             className="copy-icon-btn"
             id="copyTranslated"
-            disabled={!outputTranscript}
+            disabled={!outputTranscript || status === "translating"}
             onClick={onCopyTarget}
             title="Copy translation"
           >

@@ -1,0 +1,16 @@
+# Python Requirements for Speech-to-Speech Translation Platform & API Client
+# Install via: pip install -r requirements.txt
+
+# HTTP Client & CLI testing (api_client_text_audio.py)
+requests>=2.31.0
+
+# FastAPI Backend & Server runtime (if hosting/running the translation API)
+fastapi>=0.110.0
+uvicorn[standard]>=0.28.0
+python-multipart>=0.0.9
+pydantic>=2.5.0
+
+# Audio handling & processing
+numpy>=1.24.0
+scipy>=1.11.0
+soundfile>=0.12.1
