@@ -1,0 +1,1520 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Vaani — Speech, Understood | BRICS Summit 2026</title>
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+<link rel="shortcut icon" href="favicon.ico">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400..700;1,9..40,400..700&family=Playfair+Display:ital,wght@0,500..800;1,500..800&display=swap');
+
+  :root {
+    --parchment: #F8F2E8;
+    --parchment-deep: #EFE4D3;
+    --card-surface: rgba(255, 253, 249, 0.94);
+    --card-border: #E8DCCF;
+    --card-border-gold: #DEC6A7;
+    --ink: #381E1C;
+    --ink-muted: #796664;
+    --rose-terracotta: #8F2B39;
+    --rose-terracotta-dark: #6D1B27;
+    --rose-terracotta-glow: rgba(143, 43, 57, 0.28);
+    --saffron: #D38D30;
+    --saffron-pale: #F8EFE0;
+    --green-sage: #50715E;
+    --green-pale: #EDF3EF;
+    --sandstone-border: #E3D3C2;
+    --shadow-card: 0 16px 48px rgba(66, 34, 28, 0.09), 0 2px 8px rgba(66, 34, 28, 0.04);
+    --font-serif: 'Playfair Display', Georgia, Cambria, serif;
+    --font-sans: 'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    padding: 0;
+    background-color: var(--parchment);
+    color: var(--ink);
+    font-family: var(--font-sans);
+    min-height: 100vh;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    overflow-x: hidden;
+  }
+
+  /* Scenic Hero Backdrop with Palace, Sunset & Balustrades */
+  .scenic-wrapper {
+    position: relative;
+    width: 100%;
+    min-height: 100vh;
+    background-color: var(--parchment);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    overflow-x: hidden;
+  }
+
+  .scenic-wrapper::before {
+    content: "";
+    position: fixed;
+    top: -22vh;
+    left: 0;
+    width: 100%;
+    height: 132vh;
+    background-image: 
+      linear-gradient(to bottom, 
+        rgba(248, 242, 232, 0.05) 0%, 
+        rgba(248, 242, 232, 0.0) 25%, 
+        rgba(248, 242, 232, 0.0) 65%, 
+        rgba(248, 242, 232, 0.28) 85%, 
+        rgba(248, 242, 232, 0.70) 100%),
+      url('bg_rajasthan.png');
+    background-position: center bottom;
+    background-repeat: no-repeat;
+    background-size: cover;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .content-container {
+    max-width: 1320px;
+    margin: 0 auto;
+    padding: 16px 28px 40px;
+    width: 100%;
+    position: relative;
+    z-index: 2;
+  }
+
+  /* ==========================================================================
+     NAVBAR
+     ========================================================================== */
+  .navbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    padding: 8px 0 18px;
+    flex-wrap: wrap;
+  }
+
+  .nav-pill-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    background: var(--card-surface);
+    border: 1px solid var(--card-border-gold);
+    border-radius: 999px;
+    padding: 7px 22px 7px 9px;
+    box-shadow: 0 4px 16px rgba(66, 34, 28, 0.06);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    text-decoration: none;
+    color: inherit;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  .nav-pill-badge:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 20px rgba(66, 34, 28, 0.1);
+  }
+
+  .nav-logo-circle {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 253, 249, 0.98);
+    border: 1.5px solid var(--card-border-gold);
+    box-shadow: 0 3px 10px rgba(143, 43, 57, 0.12);
+    flex-shrink: 0;
+  }
+
+  .nav-logo-img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    padding: 1px;
+  }
+
+  .nav-brand-title {
+    font-family: var(--font-serif);
+    font-size: 26px;
+    font-weight: 700;
+    color: var(--rose-terracotta);
+    letter-spacing: -0.5px;
+    line-height: 1;
+  }
+
+  .nav-divider {
+    color: #D3C3B1;
+    font-weight: 300;
+    font-size: 18px;
+    margin: 0 3px;
+  }
+
+  .nav-tagline {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1.8px;
+    text-transform: uppercase;
+    color: var(--ink-muted);
+  }
+
+  .nav-right-group {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+  }
+
+  .banasthali-header-badge {
+    display: inline-flex;
+    align-items: center;
+    background: var(--card-surface);
+    border: 1px solid var(--card-border-gold);
+    border-radius: 999px;
+    padding: 7px 22px 7px 16px;
+    box-shadow: 0 4px 16px rgba(66, 34, 28, 0.06);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    text-decoration: none;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  .banasthali-header-badge:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 20px rgba(66, 34, 28, 0.1);
+  }
+
+  .banasthali-header-img {
+    height: 56px;
+    width: auto;
+    object-fit: contain;
+    display: block;
+  }
+
+  /* ==========================================================================
+     HERO HEADING (CENTERED OVER SKY & LAKE)
+     ========================================================================== */
+  .hero-block {
+    text-align: center;
+    padding: 26px 0 24px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+  }
+
+  .rajasthan-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font-family: var(--font-serif);
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 2.8px;
+    text-transform: uppercase;
+    color: var(--rose-terracotta);
+    margin-bottom: 6px;
+  }
+
+  .eyebrow-flourish {
+    font-size: 13px;
+    color: var(--saffron);
+  }
+
+  .hero-title-graphic-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 4px 0 8px;
+    width: 100%;
+  }
+
+  .hero-title-img {
+    width: clamp(280px, 34vw, 420px);
+    height: auto;
+    max-width: 90%;
+    display: block;
+    filter: drop-shadow(0 4px 18px rgba(110, 27, 39, 0.14));
+    transition: transform 0.25s ease;
+  }
+
+  .hero-title-img:hover {
+    transform: scale(1.02);
+  }
+
+  .hero-tagline {
+    font-family: var(--font-serif);
+    font-size: 16.5px;
+    color: var(--ink-muted);
+    margin: 6px 0 0;
+    font-style: italic;
+  }
+
+  /* ==========================================================================
+     BALANCED 2-CARD WORKSPACE CONSOLE
+     ========================================================================== */
+  .workspace-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+    gap: 18px;
+    align-items: center;
+    margin-top: 14px;
+  }
+
+  .console-card {
+    background: var(--card-surface);
+    border: 1px solid var(--card-border-gold);
+    border-radius: 20px;
+    box-shadow: var(--shadow-card);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    padding: 22px 24px;
+    display: flex;
+    flex-direction: column;
+    min-height: 380px;
+    position: relative;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  .console-card:hover {
+    box-shadow: 0 20px 54px rgba(66, 34, 28, 0.12);
+  }
+
+  /* Ornamental corner filigree corners */
+  .console-card::before, .console-card::after {
+    content: "✤";
+    position: absolute;
+    font-size: 11px;
+    color: var(--sandstone-border);
+    pointer-events: none;
+  }
+  .console-card::before { top: 8px; left: 10px; }
+  .console-card::after { top: 8px; right: 10px; }
+
+  /* Card Head */
+  .card-top-head {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--sandstone-border);
+  }
+
+  .card-top-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    font-size: 18px;
+    flex-shrink: 0;
+  }
+
+  .card-top-icon.rose-icon {
+    background: #F8E7E9;
+    color: var(--rose-terracotta);
+  }
+
+  .card-top-icon.gold-icon {
+    background: var(--saffron-pale);
+    color: var(--saffron);
+    font-weight: 700;
+    font-size: 16px;
+  }
+
+  .card-top-titles {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .card-top-name {
+    font-family: var(--font-serif);
+    font-size: 18.5px;
+    font-weight: 700;
+    color: var(--ink);
+    letter-spacing: -0.2px;
+  }
+
+  .card-top-desc {
+    font-size: 12px;
+    color: var(--ink-muted);
+  }
+
+  /* Central Connecting Arrow */
+  .cards-connector-arrow {
+    display: grid;
+    place-items: center;
+    color: var(--rose-terracotta);
+    font-size: 22px;
+    padding: 0 4px;
+    opacity: 0.85;
+  }
+
+  /* ==========================================================================
+     CARD 1: YOUR VOICE CONSOLE
+     ========================================================================== */
+  .language-selectors-strip {
+    display: grid;
+    grid-template-columns: 1fr 34px 1fr;
+    gap: 10px;
+    align-items: end;
+    margin: 18px 0 20px;
+  }
+
+  .selector-group label {
+    display: block;
+    font-size: 10.5px;
+    text-transform: uppercase;
+    letter-spacing: 1.1px;
+    font-weight: 700;
+    color: var(--ink-muted);
+    margin-bottom: 6px;
+  }
+
+  select.custom-select {
+    width: 100%;
+    appearance: none;
+    border: 1px solid var(--sandstone-border);
+    border-radius: 12px;
+    background: #FFFDF9;
+    padding: 11px 32px 11px 12px;
+    font: 600 13px var(--font-sans);
+    color: var(--ink);
+    outline: none;
+    cursor: pointer;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23796664' stroke-width='2'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+  }
+
+  select.custom-select:focus {
+    border-color: var(--rose-terracotta);
+    box-shadow: 0 0 0 3px rgba(143, 43, 57, 0.12);
+  }
+
+  .swap-button-circle {
+    width: 34px;
+    height: 42px;
+    border-radius: 9px;
+    border: 1px solid var(--sandstone-border);
+    background: #FFFDF9;
+    color: var(--rose-terracotta);
+    display: grid;
+    place-items: center;
+    font-size: 16px;
+    cursor: pointer;
+    transition: transform 0.25s ease, background 0.15s ease;
+    outline: none;
+  }
+
+  .swap-button-circle:hover {
+    background: #F8E7E9;
+    border-color: var(--rose-terracotta);
+  }
+
+  .swap-button-circle.rotated {
+    transform: rotate(180deg);
+  }
+
+  /* Center Microphone Studio Console */
+  .mic-waveform-studio {
+    background: #FAF3E8;
+    border: 1px solid #EFE4D3;
+    border-radius: 16px;
+    padding: 24px 18px 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    margin-top: 4px;
+    position: relative;
+  }
+
+  .mic-stage-row {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+    position: relative;
+    margin-bottom: 14px;
+  }
+
+  .waveform-canvas {
+    flex: 1;
+    height: 46px;
+    max-width: 110px;
+    display: block;
+  }
+
+  .mic-glow-button {
+    width: 68px;
+    height: 68px;
+    border-radius: 50%;
+    background: var(--rose-terracotta);
+    border: 4px solid #FFFDF9;
+    color: #FFF;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 26px;
+    cursor: pointer;
+    box-shadow: 0 6px 20px var(--rose-terracotta-glow);
+    transition: transform 0.18s ease, background-color 0.18s ease, box-shadow 0.18s ease;
+    outline: none;
+    position: relative;
+    z-index: 2;
+  }
+
+  .mic-glow-button:hover:not(:disabled) {
+    transform: scale(1.06);
+    background: var(--rose-terracotta-dark);
+  }
+
+  .mic-glow-button.recording {
+    background: var(--green-sage);
+    box-shadow: 0 0 0 8px rgba(80, 113, 94, 0.22);
+    animation: ripplePulse 1.4s infinite;
+  }
+
+  @keyframes ripplePulse {
+    0% { box-shadow: 0 0 0 0 rgba(80, 113, 94, 0.35); }
+    70% { box-shadow: 0 0 0 16px rgba(80, 113, 94, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(80, 113, 94, 0); }
+  }
+
+  .mic-title-caption {
+    font-weight: 700;
+    font-size: 14px;
+    color: var(--ink);
+    margin-bottom: 2px;
+  }
+
+  .mic-hint-caption {
+    font-size: 11.5px;
+    color: var(--ink-muted);
+  }
+
+  .mic-timer-pill {
+    margin-top: 10px;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: #FFFDF9;
+    border: 1px solid var(--sandstone-border);
+    border-radius: 999px;
+    padding: 3px 10px;
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--rose-terracotta);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .mic-timer-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--rose-terracotta);
+  }
+
+  .mic-timer-dot.pulsing {
+    animation: dotPulse 1.2s infinite;
+  }
+
+  /* Card Sub-actions (Upload / Translate Trigger) */
+  .card-voice-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    margin-top: 16px;
+    padding-top: 12px;
+    border-top: 1px solid var(--sandstone-border);
+  }
+
+  .text-action-btn {
+    background: transparent;
+    border: 1px solid var(--sandstone-border);
+    background: #FFFDF9;
+    color: var(--ink-muted);
+    font-size: 11.5px;
+    font-weight: 600;
+    border-radius: 999px;
+    padding: 7px 14px;
+    cursor: pointer;
+    transition: background 0.15s ease, color 0.15s ease;
+  }
+
+  .text-action-btn:hover {
+    background: #F8EFE0;
+    color: var(--ink);
+  }
+
+  .primary-translate-trigger {
+    background: var(--ink);
+    color: #FFFDF9;
+    border: none;
+    border-radius: 999px;
+    padding: 8px 18px;
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: opacity 0.15s ease, transform 0.15s ease;
+  }
+
+  .primary-translate-trigger:hover:not(:disabled) {
+    opacity: 0.9;
+    transform: translateY(-1px);
+  }
+
+  .primary-translate-trigger:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+  }
+
+  /* ==========================================================================
+     CARD 2: YOUR CONVERSATION CONSOLE
+     ========================================================================== */
+  .conversation-blocks-stack {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin: 14px 0 16px;
+  }
+
+  .transcript-section-card {
+    background: #FFFDF9;
+    border: 1px solid var(--sandstone-border);
+    border-radius: 12px;
+    padding: 12px 14px 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    position: relative;
+    transition: border-color 0.2s ease;
+  }
+
+  .transcript-header-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+  }
+
+  .transcript-label-caps {
+    font-size: 9.5px;
+    font-weight: 800;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+    color: var(--ink-muted);
+  }
+
+  .language-flag-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    background: #FAF3E8;
+    border: 1px solid #EADBCC;
+    border-radius: 999px;
+    padding: 3px 9px;
+    font-size: 10.5px;
+    font-weight: 700;
+    color: var(--ink);
+  }
+
+  .flag-emoji {
+    font-size: 12px;
+    line-height: 1;
+  }
+
+  .transcript-content-text {
+    font-size: 14px;
+    line-height: 1.6;
+    color: var(--ink);
+    min-height: 48px;
+    white-space: pre-wrap;
+    word-break: break-word;
+  }
+
+  .transcript-content-text.empty {
+    color: #A39385;
+    font-style: italic;
+    font-size: 13px;
+  }
+
+  .copy-icon-btn {
+    align-self: flex-end;
+    background: transparent;
+    border: none;
+    color: var(--rose-terracotta);
+    cursor: pointer;
+    font-size: 13px;
+    padding: 2px 4px;
+    border-radius: 4px;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-weight: 600;
+    transition: background 0.15s ease;
+  }
+
+  .copy-icon-btn:hover:not(:disabled) {
+    background: #F8E7E9;
+  }
+
+  .copy-icon-btn:disabled {
+    opacity: 0.35;
+    cursor: not-allowed;
+  }
+
+  /* Audio Player Banner */
+  .translated-voice-player {
+    background: #F9F1E2;
+    border: 1px solid #EADBCC;
+    border-radius: 14px;
+    padding: 12px 14px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-top: 4px;
+  }
+
+  .voice-motif-badge {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: #FFFDF9;
+    border: 1px solid #E6D4BF;
+    display: grid;
+    place-items: center;
+    color: var(--rose-terracotta);
+    font-size: 15px;
+    flex-shrink: 0;
+  }
+
+  .player-inner-content {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .player-header-title {
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 0.6px;
+    text-transform: uppercase;
+    color: var(--rose-terracotta);
+    display: block;
+    margin-bottom: 6px;
+  }
+
+  .player-controls-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+  }
+
+  .play-pause-btn {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: var(--rose-terracotta);
+    border: none;
+    color: #FFFDF9;
+    display: grid;
+    place-items: center;
+    font-size: 13px;
+    cursor: pointer;
+    flex-shrink: 0;
+    transition: transform 0.15s ease, background 0.15s ease;
+  }
+
+  .play-pause-btn:hover:not(:disabled) {
+    transform: scale(1.06);
+    background: var(--rose-terracotta-dark);
+  }
+
+  .play-pause-btn:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+
+  .scrub-track {
+    flex: 1;
+    height: 4px;
+    background: #E0CDB8;
+    border-radius: 2px;
+    position: relative;
+    cursor: pointer;
+  }
+
+  .scrub-progress {
+    height: 100%;
+    background: var(--rose-terracotta);
+    border-radius: 2px;
+    width: 0%;
+  }
+
+  .player-time-badge {
+    font-size: 10px;
+    font-weight: 700;
+    color: var(--ink-muted);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .audio-toolbar-buttons {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .speed-pill-btn {
+    background: #FFFDF9;
+    border: 1px solid #D5C2AD;
+    border-radius: 999px;
+    padding: 2px 7px;
+    font-size: 10px;
+    font-weight: 700;
+    color: var(--ink);
+    cursor: pointer;
+  }
+
+  .speed-pill-btn.active {
+    background: var(--saffron);
+    color: #FFF;
+    border-color: var(--saffron);
+  }
+
+  /* Inline Error */
+  .inline-error-banner {
+    display: none;
+    margin-top: 10px;
+    padding: 10px 14px;
+    background: #FFF0EF;
+    border: 1px solid #E8B5B8;
+    color: #923D43;
+    border-radius: 10px;
+    font-size: 11.5px;
+    line-height: 1.5;
+  }
+
+  .inline-error-banner.show {
+    display: block;
+  }
+
+  /* ==========================================================================
+     FOOTER RUNNER & BANNER
+     ========================================================================== */
+  .footer-runner {
+    text-align: center;
+    padding: 24px 0 16px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .footer-creed {
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: #8C6F5A;
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .creed-flourish {
+    color: var(--rose-terracotta);
+    font-size: 12px;
+  }
+
+  .rajasthani-border-ribbon {
+    width: 100%;
+    height: 14px;
+    background-image: repeating-linear-gradient(45deg, var(--rose-terracotta) 0, var(--rose-terracotta) 8px, #DEC6A7 8px, #DEC6A7 16px, #FFFDF9 16px, #FFFDF9 24px);
+    opacity: 0.45;
+    border-top: 1px solid var(--sandstone-border);
+    border-bottom: 1px solid var(--sandstone-border);
+  }
+
+  /* Responsive Rules */
+  @media (max-width: 960px) {
+    .workspace-grid {
+      grid-template-columns: 1fr;
+      gap: 16px;
+    }
+    .cards-connector-arrow {
+      transform: rotate(90deg);
+      padding: 6px 0;
+    }
+    .banasthali-header-img {
+      height: 44px;
+    }
+    .content-container {
+      padding: 14px 16px 30px;
+    }
+    .hero-main-title {
+      font-size: 48px;
+    }
+    .title-sparkle {
+      right: -16px;
+      font-size: 18px;
+    }
+    .scenic-wrapper::before {
+      top: -14vh;
+      height: 124vh;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+</style>
+</head>
+<body>
+
+<div class="scenic-wrapper">
+  <div class="content-container">
+    <!-- Navbar Header -->
+    <header class="navbar">
+      <a href="#" class="nav-pill-badge" title="Vaani — Speech Translation">
+        <div class="nav-logo-circle">
+          <img src="vaani_emblem.png" alt="Vaani Crest" class="nav-logo-img" onerror="this.src='logo.png'">
+        </div>
+        <span class="nav-brand-title">Vaani</span>
+        <span class="nav-divider">|</span>
+        <span class="nav-tagline">Speech, Understood</span>
+      </a>
+
+      <div class="nav-right-group">
+        <a href="https://banasthali.org" target="_blank" rel="noreferrer" class="banasthali-header-badge" title="Banasthali Vidyapith">
+          <img src="banasthali_logo.png" alt="Banasthali University" class="banasthali-header-img">
+        </a>
+      </div>
+    </header>
+
+    <!-- Centered Hero Heading -->
+    <section class="hero-block" id="home">
+      <div class="rajasthan-eyebrow">
+        <span class="eyebrow-flourish">✤</span>
+        <span>Pādhāro Māre Des</span>
+        <span class="eyebrow-flourish">✤</span>
+      </div>
+
+      <div class="hero-title-graphic-container">
+        <img src="vaani_title.png" alt="Vaani — Speech, Understood" class="hero-title-img">
+      </div>
+
+      <p class="hero-tagline">Speak naturally. See the words. Hear the translation.</p>
+    </section>
+
+    <!-- Balanced 2-Card Translation Workspace -->
+    <main class="workspace-grid">
+      <!-- LEFT CARD: YOUR VOICE -->
+      <section class="console-card voice-card" id="cardVoice">
+        <div class="card-top-head">
+          <div class="card-top-icon rose-icon">🎙️</div>
+          <div class="card-top-titles">
+            <span class="card-top-name">Your Voice</span>
+            <span class="card-top-desc">Speak in any language</span>
+          </div>
+        </div>
+
+        <!-- Language Selectors Row -->
+        <div class="language-selectors-strip">
+          <div class="selector-group">
+            <label for="source">Source Language</label>
+            <select id="source" class="custom-select">
+              <option value="auto">Auto Detect</option>
+              <option value="hi" selected>🇮🇳 Hindi</option>
+              <option value="en">🇬🇧 English</option>
+              <option value="ru">🇷🇺 Russian</option>
+              <option value="zh">🇨🇳 Chinese</option>
+              <option value="pt">🇧🇷 Portuguese</option>
+              <option value="ar">🇸🇦 Arabic</option>
+              <option value="bn">🇮🇳 Bengali</option>
+              <option value="ta">🇮🇳 Tamil</option>
+              <option value="te">🇮🇳 Telugu</option>
+              <option value="mr">🇮🇳 Marathi</option>
+              <option value="gu">🇮🇳 Gujarati</option>
+              <option value="ur">🇵🇰 Urdu</option>
+              <option value="fr">🇫🇷 French</option>
+              <option value="es">🇪🇸 Spanish</option>
+              <option value="af">🇿🇦 Afrikaans</option>
+              <option value="fa">🇮🇷 Persian</option>
+              <option value="sw">🇰🇪 Swahili</option>
+            </select>
+          </div>
+
+          <button type="button" class="swap-button-circle" id="swapBtn" title="Swap languages" aria-label="Swap source and target languages">→</button>
+
+          <div class="selector-group">
+            <label for="target">Translate To</label>
+            <select id="target" class="custom-select">
+              <option value="en" selected>🇬🇧 English</option>
+              <option value="hi">🇮🇳 Hindi</option>
+              <option value="ru">🇷🇺 Russian</option>
+              <option value="zh">🇨🇳 Chinese</option>
+              <option value="pt">🇧🇷 Portuguese</option>
+              <option value="ar">🇸🇦 Arabic</option>
+              <option value="bn">🇮🇳 Bengali</option>
+              <option value="ta">🇮🇳 Tamil</option>
+              <option value="te">🇮🇳 Telugu</option>
+              <option value="mr">🇮🇳 Marathi</option>
+              <option value="gu">🇮🇳 Gujarati</option>
+              <option value="ur">🇵🇰 Urdu</option>
+              <option value="fr">🇫🇷 French</option>
+              <option value="es">🇪🇸 Spanish</option>
+              <option value="af">🇿🇦 Afrikaans</option>
+              <option value="fa">🇮🇷 Persian</option>
+              <option value="sw">🇰🇪 Swahili</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Central Microphone Console with Flanking Waveforms -->
+        <div class="mic-waveform-studio">
+          <div class="mic-stage-row">
+            <canvas id="waveLeft" class="waveform-canvas" aria-hidden="true"></canvas>
+
+            <button type="button" class="mic-glow-button" id="recordBtn" aria-label="Start speaking" title="Click to speak (or press Spacebar)">
+              <span id="micGlyph">🎙️</span>
+            </button>
+
+            <canvas id="waveRight" class="waveform-canvas" aria-hidden="true"></canvas>
+          </div>
+
+          <div class="mic-title-caption" id="micCaption">Click to start speaking</div>
+          <div class="mic-hint-caption" id="micSubcaption">Your voice will be translated in real time</div>
+
+          <div class="mic-timer-pill" id="timerPill" hidden>
+            <span class="mic-timer-dot" id="timerDot"></span>
+            <span id="timerText">00:00</span>
+          </div>
+        </div>
+
+        <!-- Voice Footer Actions -->
+        <div class="card-voice-footer">
+          <button type="button" class="text-action-btn" id="uploadBtn">Upload audio file</button>
+          <input type="file" id="audioFile" accept="audio/*" hidden>
+          <button type="button" class="primary-translate-trigger" id="translateBtn" disabled>Translate speech ↗</button>
+        </div>
+
+        <div class="inline-error-banner" id="errorBox" role="alert"></div>
+      </section>
+
+      <!-- Center Connector Arrow -->
+      <div class="cards-connector-arrow" aria-hidden="true">→</div>
+
+      <!-- RIGHT CARD: YOUR CONVERSATION -->
+      <section class="console-card conversation-card" id="cardConversation">
+        <div class="card-top-head">
+          <div class="card-top-icon gold-icon">文A</div>
+          <div class="card-top-titles">
+            <span class="card-top-name">Your Conversation</span>
+            <span class="card-top-desc">Original transcript and translated voice</span>
+          </div>
+        </div>
+
+        <!-- Transcript Stack -->
+        <div class="conversation-blocks-stack">
+          <!-- WHAT YOU SAID -->
+          <div class="transcript-section-card">
+            <div class="transcript-header-row">
+              <span class="transcript-label-caps">WHAT YOU SAID</span>
+              <div class="language-flag-pill" id="sourceMeta">
+                <span class="flag-emoji" id="sourceFlag">🇮🇳</span>
+                <span id="sourceLangLabel">Hindi (Detected)</span>
+              </div>
+            </div>
+            <div class="transcript-content-text empty" id="sourceText" aria-live="polite">
+              Your spoken transcript will appear here.
+            </div>
+            <button type="button" class="copy-icon-btn" id="copySource" disabled title="Copy original transcript">
+              <span id="copySourceIcon">📋</span>
+              <span id="copySourceLabel">Copy</span>
+            </button>
+          </div>
+
+          <!-- TRANSLATED TEXT -->
+          <div class="transcript-section-card">
+            <div class="transcript-header-row">
+              <span class="transcript-label-caps">TRANSLATED TEXT</span>
+              <div class="language-flag-pill" id="translatedMeta">
+                <span class="flag-emoji" id="targetFlag">🇬🇧</span>
+                <span id="targetLangLabel">English</span>
+              </div>
+            </div>
+            <div class="transcript-content-text empty" id="translatedText" aria-live="polite">
+              Your translated text will appear here.
+            </div>
+            <button type="button" class="copy-icon-btn" id="copyTranslated" disabled title="Copy translation">
+              <span id="copyTargetIcon">📋</span>
+              <span id="copyTargetLabel">Copy</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Translated Voice Audio Player Console -->
+        <div class="translated-voice-player">
+          <div class="voice-motif-badge" aria-hidden="true">✤</div>
+
+          <div class="player-inner-content">
+            <span class="player-header-title" id="audioHeaderLabel">Translated Voice</span>
+
+            <div class="player-controls-row">
+              <button type="button" class="play-pause-btn" id="playAudioBtn" disabled title="Play translated audio" aria-label="Play audio">
+                ▶
+              </button>
+
+              <div class="scrub-track" id="scrubTrack" title="Seek playback">
+                <div class="scrub-progress" id="scrubProgress"></div>
+              </div>
+
+              <span class="player-time-badge" id="playerTime">0:00 / 0:00</span>
+
+              <div class="audio-toolbar-buttons">
+                <button type="button" class="speed-pill-btn" id="speedToggleBtn" title="Toggle 0.75x speed">1x</button>
+                <button type="button" class="speed-pill-btn" id="downloadWavBtn" disabled title="Download audio">↓</button>
+              </div>
+            </div>
+
+            <audio id="translatedAudio" hidden></audio>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <!-- Bottom Creed & Border Ribbon -->
+  <footer class="footer-runner">
+    <div class="footer-creed">
+      <span class="creed-flourish">✤</span>
+      <span>BRIDGING CULTURES • EMPOWERING DIALOGUE • BANASTHALI VIDYAPITH</span>
+      <span class="creed-flourish">✤</span>
+    </div>
+    <div class="rajasthani-border-ribbon" aria-hidden="true"></div>
+  </footer>
+</div>
+
+<script>
+(() => {
+  // Translation API Server Endpoint
+  const API_BASE = 'http://172.16.41.109:8000';
+  const $ = id => document.getElementById(id);
+
+  // Flags directory mapping
+  const FLAGS = {
+    'hi': '🇮🇳', 'en': '🇬🇧', 'ru': '🇷🇺', 'zh': '🇨🇳', 'pt': '🇧🇷',
+    'ar': '🇸🇦', 'bn': '🇮🇳', 'ta': '🇮🇳', 'te': '🇮🇳', 'mr': '🇮🇳',
+    'gu': '🇮🇳', 'ur': '🇵🇰', 'fr': '🇫🇷', 'es': '🇪🇸', 'af': '🇿🇦',
+    'fa': '🇮🇷', 'sw': '🇰🇪', 'auto': '🌐'
+  };
+
+  const RTL_LANGS = ['ar', 'ur', 'fa'];
+
+  // DOM Elements
+  const recordBtn = $('recordBtn');
+  const micGlyph = $('micGlyph');
+  const micCaption = $('micCaption');
+  const micSubcaption = $('micSubcaption');
+  const timerPill = $('timerPill');
+  const timerDot = $('timerDot');
+  const timerText = $('timerText');
+  const translateBtn = $('translateBtn');
+  const uploadBtn = $('uploadBtn');
+  const audioFileInput = $('audioFile');
+  const swapBtn = $('swapBtn');
+  const canvasLeft = $('waveLeft');
+  const canvasRight = $('waveRight');
+  const ctxLeft = canvasLeft.getContext('2d');
+  const ctxRight = canvasRight.getContext('2d');
+
+  // Player Elements
+  const playAudioBtn = $('playAudioBtn');
+  const translatedAudio = $('translatedAudio');
+  const scrubProgress = $('scrubProgress');
+  const scrubTrack = $('scrubTrack');
+  const playerTime = $('playerTime');
+  const speedToggleBtn = $('speedToggleBtn');
+  const downloadWavBtn = $('downloadWavBtn');
+
+  // State
+  let mediaRecorder = null, stream = null, audioContext = null, analyser = null, animId = null;
+  let chunks = [], audioBlob = null, startedAt = 0, timerInterval = null;
+  let recording = false, selectedFileName = '';
+  let isSlow = false;
+
+  function showError(msg) {
+    $('errorBox').textContent = msg;
+    $('errorBox').classList.add('show');
+  }
+
+  function clearError() {
+    $('errorBox').textContent = '';
+    $('errorBox').classList.remove('show');
+  }
+
+  function formatTime(secs) {
+    const m = Math.floor(secs / 60);
+    const s = Math.floor(secs % 60);
+    return `${m}:${String(s).padStart(2, '0')}`;
+  }
+
+  function resizeCanvases() {
+    const dpr = window.devicePixelRatio || 1;
+    [canvasLeft, canvasRight].forEach(c => {
+      const r = c.getBoundingClientRect();
+      c.width = Math.max(1, r.width * dpr);
+      c.height = Math.max(1, r.height * dpr);
+      const ctx = c.getContext('2d');
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    });
+  }
+
+  // Real-time canvas waveform flanking the mic
+  function drawFlankingWaves() {
+    if (!recording || !analyser) return;
+
+    const values = new Uint8Array(analyser.frequencyBinCount);
+    analyser.getByteFrequencyData(values);
+
+    const renderBars = (canvas, ctx, isLeft) => {
+      const w = canvas.clientWidth, h = canvas.clientHeight;
+      ctx.clearRect(0, 0, w, h);
+      const bars = 18;
+      const barW = 3;
+      const gap = (w - (bars * barW)) / (bars - 1);
+      const mid = h / 2;
+
+      for (let i = 0; i < bars; i++) {
+        const valIdx = isLeft ? (bars - 1 - i) : i;
+        const amp = (values[valIdx * 2] || 0) / 255.0;
+        const barH = Math.max(3, amp * (h * 0.9));
+        const x = i * (barW + gap);
+
+        ctx.fillStyle = amp > 0.5 ? '#D38D30' : '#8F2B39';
+        ctx.beginPath();
+        if (ctx.roundRect) ctx.roundRect(x, mid - barH / 2, barW, barH, 2);
+        else ctx.rect(x, mid - barH / 2, barW, barH);
+        ctx.fill();
+      }
+    };
+
+    renderBars(canvasLeft, ctxLeft, true);
+    renderBars(canvasRight, ctxRight, false);
+
+    animId = requestAnimationFrame(drawFlankingWaves);
+  }
+
+  function stopFlankingWaves() {
+    if (animId) cancelAnimationFrame(animId);
+    animId = null;
+    ctxLeft.clearRect(0, 0, canvasLeft.clientWidth, canvasLeft.clientHeight);
+    ctxRight.clearRect(0, 0, canvasRight.clientWidth, canvasRight.clientHeight);
+  }
+
+  // Audio Recording Flow
+  async function startRecording() {
+    clearError();
+    if (!navigator.mediaDevices?.getUserMedia || !window.MediaRecorder) {
+      showError('Microphone recording is unavailable. A secure HTTPS origin or localhost is required.');
+      return;
+    }
+
+    try {
+      stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      chunks = [];
+      audioBlob = null;
+      selectedFileName = '';
+
+      const mime = ['audio/webm;codecs=opus', 'audio/webm', 'audio/mp4'].find(t => MediaRecorder.isTypeSupported(t));
+      mediaRecorder = new MediaRecorder(stream, mime ? { mimeType: mime } : undefined);
+
+      mediaRecorder.ondataavailable = e => {
+        if (e.data.size) chunks.push(e.data);
+      };
+
+      mediaRecorder.onstop = () => {
+        audioBlob = new Blob(chunks, { type: mediaRecorder.mimeType || 'audio/webm' });
+        stream?.getTracks().forEach(t => t.stop());
+        stream = null;
+        if (audioContext) {
+          audioContext.close();
+          audioContext = null;
+        }
+        analyser = null;
+        stopFlankingWaves();
+
+        recordBtn.classList.remove('recording');
+        micGlyph.textContent = '🎙️';
+        micCaption.textContent = 'Recording captured';
+        micSubcaption.textContent = 'Tap Translate speech or speak again.';
+        timerDot.classList.remove('pulsing');
+        translateBtn.disabled = !audioBlob;
+      };
+
+      mediaRecorder.start(200);
+      recording = true;
+      startedAt = Date.now();
+
+      audioContext = new (window.AudioContext || window.webkitAudioContext)();
+      const sourceNode = audioContext.createMediaStreamSource(stream);
+      analyser = audioContext.createAnalyser();
+      analyser.fftSize = 128;
+      sourceNode.connect(analyser);
+
+      resizeCanvases();
+      drawFlankingWaves();
+
+      recordBtn.classList.add('recording');
+      micGlyph.textContent = '⏹';
+      micCaption.textContent = 'Listening to your voice…';
+      micSubcaption.textContent = 'Tap to complete your speech.';
+      timerPill.hidden = false;
+      timerDot.classList.add('pulsing');
+
+      timerText.textContent = '00:00';
+      timerInterval = setInterval(() => {
+        const secs = Math.floor((Date.now() - startedAt) / 1000);
+        timerText.textContent = String(Math.floor(secs / 60)).padStart(2, '0') + ':' + String(secs % 60).padStart(2, '0');
+      }, 250);
+    } catch (err) {
+      showError(err.name === 'NotAllowedError' ? 'Microphone permission was denied. Please allow microphone access.' : 'Could not initialize microphone hardware.');
+    }
+  }
+
+  function stopRecording() {
+    if (!recording) return;
+    recording = false;
+    clearInterval(timerInterval);
+    timerInterval = null;
+    if (mediaRecorder && mediaRecorder.state !== 'inactive') mediaRecorder.stop();
+  }
+
+  recordBtn.addEventListener('click', () => recording ? stopRecording() : startRecording());
+
+  // Upload Audio
+  uploadBtn.addEventListener('click', () => audioFileInput.click());
+  audioFileInput.addEventListener('change', e => {
+    const f = e.target.files?.[0];
+    if (!f) return;
+    clearError();
+    if (recording) stopRecording();
+    audioBlob = f;
+    selectedFileName = f.name;
+    micCaption.textContent = f.name;
+    micSubcaption.textContent = 'Audio file selected. Ready to translate.';
+    translateBtn.disabled = false;
+  });
+
+  // Language Selectors & Flags Sync
+  function syncFlags() {
+    const s = $('source').value;
+    const t = $('target').value;
+    $('sourceFlag').textContent = FLAGS[s] || '🌐';
+    $('targetFlag').textContent = FLAGS[t] || '🌐';
+
+    const sName = $('source').selectedOptions[0]?.text.replace(/^[^\w\s]+\s*/, '') || s;
+    const tName = $('target').selectedOptions[0]?.text.replace(/^[^\w\s]+\s*/, '') || t;
+    $('sourceLangLabel').textContent = s === 'auto' ? 'Auto Detect' : sName;
+    $('targetLangLabel').textContent = tName;
+
+    // RTL
+    $('sourceText').dir = RTL_LANGS.includes(s) ? 'rtl' : 'ltr';
+    $('translatedText').dir = RTL_LANGS.includes(t) ? 'rtl' : 'ltr';
+  }
+
+  $('source').addEventListener('change', syncFlags);
+  $('target').addEventListener('change', syncFlags);
+
+  // Swap Languages
+  swapBtn.addEventListener('click', () => {
+    swapBtn.classList.toggle('rotated');
+    const s = $('source').value;
+    const t = $('target').value;
+    $('source').value = t;
+    $('target').value = s === 'auto' ? 'en' : s;
+    syncFlags();
+    if (audioBlob && !recording) executeTranslate();
+  });
+
+  // Translation Execution
+  async function executeTranslate() {
+    if (!audioBlob) return;
+    clearError();
+    translateBtn.disabled = true;
+    micCaption.textContent = 'Translating speech…';
+    micSubcaption.textContent = 'Giving your words a voice in another language…';
+
+    try {
+      const form = new FormData();
+      const ext = audioBlob.name ? audioBlob.name.split('.').pop() : (audioBlob.type.includes('mp4') ? 'mp4' : 'webm');
+      form.append('audio', audioBlob, selectedFileName || `voice.${ext}`);
+      const sVal = $('source').value;
+      const tVal = $('target').value;
+      let actualSource = (sVal === 'auto' || !sVal) ? 'hi' : sVal;
+      if (sVal === 'auto' && actualSource === tVal) {
+        actualSource = tVal === 'hi' ? 'en' : 'hi';
+      }
+
+      form.append('source', actualSource);
+      form.append('target', tVal);
+
+      const base = (typeof API_BASE !== 'undefined' && API_BASE) ? API_BASE : 'http://172.16.41.109:8000';
+      const endpoint = `${(base || '').replace(/\/$/, '')}/translate`;
+
+      const resp = await fetch(endpoint, {
+        method: 'POST',
+        body: form
+      });
+
+      if (!resp.ok) {
+        let detail = 'Server returned an error.';
+        try { const err = await resp.json(); detail = err.detail || err.message || detail; } catch {}
+        throw new Error(`${detail} (HTTP ${resp.status})`);
+      }
+
+      const data = await resp.json();
+
+      // Display Source
+      $('sourceText').textContent = data.source_text || 'No speech was recognized.';
+      $('sourceText').classList.toggle('empty', !data.source_text);
+      $('copySource').disabled = !data.source_text;
+
+      // Display Translation
+      $('translatedText').textContent = data.translated_text || 'No translated text was returned.';
+      $('translatedText').classList.toggle('empty', !data.translated_text);
+      $('copyTranslated').disabled = !data.translated_text;
+
+      // Audio Playback
+      if (data.audio_base64) {
+        const bin = atob(data.audio_base64);
+        const bytes = new Uint8Array(bin.length);
+        for (let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
+        const url = URL.createObjectURL(new Blob([bytes], { type: 'audio/wav' }));
+
+        translatedAudio.src = url;
+        playAudioBtn.disabled = false;
+        downloadWavBtn.disabled = false;
+        $('audioHeaderLabel').textContent = data.tts_engine ? `Translated Voice (${data.tts_engine})` : 'Translated Voice';
+
+        // Auto-play
+        translatedAudio.playbackRate = isSlow ? 0.75 : 1.0;
+        translatedAudio.play().then(() => {
+          playAudioBtn.textContent = '⏸';
+        }).catch(() => {
+          playAudioBtn.textContent = '▶';
+        });
+      }
+
+      micCaption.textContent = 'Translation complete';
+      micSubcaption.textContent = 'Listen to the audio or tap again to record.';
+    } catch (e) {
+      showError(`Translation failed. ${e.message}. Verify that the translation server is running at ${API_BASE}.`);
+      micCaption.textContent = 'Attention needed';
+      micSubcaption.textContent = 'Please check network connection and try again.';
+    } finally {
+      translateBtn.disabled = !audioBlob;
+    }
+  }
+
+  translateBtn.addEventListener('click', executeTranslate);
+
+  // Audio Player Controls
+  playAudioBtn.addEventListener('click', () => {
+    if (!translatedAudio.src) return;
+    if (translatedAudio.paused) {
+      translatedAudio.play();
+      playAudioBtn.textContent = '⏸';
+    } else {
+      translatedAudio.pause();
+      playAudioBtn.textContent = '▶';
+    }
+  });
+
+  translatedAudio.addEventListener('timeupdate', () => {
+    const cur = translatedAudio.currentTime || 0;
+    const dur = translatedAudio.duration || 0;
+    const pct = dur > 0 ? (cur / dur) * 100 : 0;
+    scrubProgress.style.width = `${pct}%`;
+    playerTime.textContent = `${formatTime(cur)} / ${formatTime(dur)}`;
+  });
+
+  translatedAudio.addEventListener('ended', () => {
+    playAudioBtn.textContent = '▶';
+    scrubProgress.style.width = '0%';
+  });
+
+  scrubTrack.addEventListener('click', e => {
+    if (!translatedAudio.duration) return;
+    const rect = scrubTrack.getBoundingClientRect();
+    const pos = (e.clientX - rect.left) / rect.width;
+    translatedAudio.currentTime = pos * translatedAudio.duration;
+  });
+
+  speedToggleBtn.addEventListener('click', () => {
+    isSlow = !isSlow;
+    speedToggleBtn.classList.toggle('active', isSlow);
+    speedToggleBtn.textContent = isSlow ? '0.75x' : '1x';
+    if (translatedAudio.src) translatedAudio.playbackRate = isSlow ? 0.75 : 1.0;
+  });
+
+  downloadWavBtn.addEventListener('click', () => {
+    if (!translatedAudio.src) return;
+    const a = document.createElement('a');
+    a.href = translatedAudio.src;
+    a.download = `vaani_${$('source').value}_to_${$('target').value}.wav`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+  });
+
+  // Copy Buttons
+  $('copySource').addEventListener('click', () => {
+    navigator.clipboard.writeText($('sourceText').textContent).then(() => {
+      $('copySourceLabel').textContent = 'Copied!';
+      setTimeout(() => $('copySourceLabel').textContent = 'Copy', 1300);
+    });
+  });
+
+  $('copyTranslated').addEventListener('click', () => {
+    navigator.clipboard.writeText($('translatedText').textContent).then(() => {
+      $('copyTargetLabel').textContent = 'Copied!';
+      setTimeout(() => $('copyTargetLabel').textContent = 'Copy', 1300);
+    });
+  });
+
+  // Spacebar Record Toggle
+  window.addEventListener('keydown', e => {
+    if (e.code === 'Space') {
+      const tag = document.activeElement ? document.activeElement.tagName.toLowerCase() : '';
+      if (tag === 'input' || tag === 'textarea' || tag === 'select' || tag === 'button') return;
+      e.preventDefault();
+      if (recording) stopRecording(); else startRecording();
+    }
+  });
+
+  window.addEventListener('resize', resizeCanvases);
+  syncFlags();
+  resizeCanvases();
+})();
+</script>
+</body>
+</html>
